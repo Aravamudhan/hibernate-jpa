@@ -15,6 +15,7 @@
 	<log4j-versionl>2.6.1</log4j-versionl>
 	<testng-version>6.9.10</testng-version>
 	<commons-logging.version>1.2</commons-logging.version>
+	<commons-lang3-version>3.4</commons-lang3-version>
 	<hibernate-entity-manager-version>5.2.1.Final</hibernate-entity-manager-version>
 	<hibernate-validator-version>5.2.4.Final</hibernate-validator-version>
 	<hikaricp-version>2.4.5</hikaricp-version>
@@ -103,6 +104,11 @@
     	<groupId>com.h2database</groupId>
     	<artifactId>h2</artifactId>
     	<version>${h2databse-version}</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.apache.commons</groupId>
+    	<artifactId>commons-lang3</artifactId>
+    	<version>${commons-lang3-version}</version>
 	</dependency>
   </dependencies>
 </project>
