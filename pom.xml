@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.amudhan</groupId>
+  <artifactId>jpatest</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<org.springframework.version>4.3.0.RELEASE</org.springframework.version>
+	<org.springframework.security.version>4.1.1.RELEASE</org.springframework.security.version>
+	<aspectj.version>1.7.4</aspectj.version>
+	<slf4j.version>1.7.21</slf4j.version>
+	<log4j-versionl>2.6.1</log4j-versionl>
+	<testng-version>6.9.10</testng-version>
+	<commons-logging.version>1.2</commons-logging.version>
+	<hibernate-entity-manager-version>5.2.1.Final</hibernate-entity-manager-version>
+	<hibernate-validator-version>5.2.4.Final</hibernate-validator-version>
+	<hikaricp-version>2.4.5</hikaricp-version>
+	<h2databse-version>1.4.191</h2databse-version>
+  </properties>
+
+  <name>jpatest</name>
+  <url>http://maven.apache.org</url>
+
+  <dependencies>
+  	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-core</artifactId>
+		<version>${org.springframework.version}</version>
+	</dependency>
+	<dependency>
+	  	<groupId>org.springframework</groupId>
+	  	<artifactId>spring-beans</artifactId>
+	  	<version>${org.springframework.version}</version>
+	</dependency>
+	<dependency>
+	  	<groupId>org.springframework</groupId>
+	  	<artifactId>spring-context</artifactId>
+	  	<version>${org.springframework.version}</version>
+	</dependency>
+	<dependency>
+	  	<groupId>org.springframework</groupId>
+	  	<artifactId>spring-tx</artifactId>
+	  	<version>${org.springframework.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-orm</artifactId>
+		<version>${org.springframework.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-test</artifactId>
+		<version>${org.springframework.version}</version>
+	</dependency>
+  	<!-- Hibernate implementation of JPA -->
+  	<dependency>
+    	<groupId>org.hibernate</groupId>
+    	<artifactId>hibernate-entitymanager</artifactId>
+    	<version>${hibernate-entity-manager-version}</version>
+	</dependency>
+	<!-- Hibernate validation engine -->
+	<dependency>
+   		<groupId>org.hibernate</groupId>
+   		<artifactId>hibernate-validator</artifactId>
+   		<version>${hibernate-validator-version}</version>
+	</dependency>
+	<!-- HikariCP, connnection pool -->
+	<dependency>
+   		<groupId>com.zaxxer</groupId>
+   		<artifactId>HikariCP</artifactId>
+   		<version>${hikaricp-version}</version>
+   		<scope>compile</scope>
+	</dependency>
+	<!-- logging -->
+	<!-- SLF4J API -->
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>${slf4j.version}</version>
+	</dependency>
+	<!-- LOG4J implementation of SLF4J API -->
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-slf4j-impl</artifactId>
+		<version>${log4j-versionl}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-core</artifactId>
+		<version>${log4j-versionl}</version>
+	</dependency>
+	<!-- testng -->
+	<dependency>
+		<groupId>org.testng</groupId>
+	    <artifactId>testng</artifactId>
+	    <version>${testng-version}</version>
+	    <scope>test</scope>
+	</dependency>
+	<dependency>
+    	<groupId>com.h2database</groupId>
+    	<artifactId>h2</artifactId>
+    	<version>${h2databse-version}</version>
+	</dependency>
+  </dependencies>
+</project>
