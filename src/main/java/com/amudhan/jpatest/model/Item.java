@@ -24,7 +24,6 @@ public class Item {
 	private String name;
 	@ElementCollection
 	@CollectionTable(name="IMAGE", joinColumns=@JoinColumn(name="ITEM_ID"))
-	@Column(name="FILE_NAME")
 	private Set<Image> images = new HashSet<Image>();
 	
 	public long getId() {

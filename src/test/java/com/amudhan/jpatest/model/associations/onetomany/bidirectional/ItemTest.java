@@ -1,4 +1,7 @@
-package com.amudhan.jpatest;
+package com.amudhan.jpatest.model.associations.onetomany.bidirectional;
+
+import java.math.BigDecimal;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,12 +14,8 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 
-import com.amudhan.jpatest.model.Image;
-import com.amudhan.jpatest.model.Item;
-
 @ContextConfiguration("classpath:configuration/applicationContext-test.xml")
 public class ItemTest extends AbstractTransactionalTestNGSpringContextTests{
-	
 	@PersistenceContext
 	private EntityManager entityManager;
 	private static final Logger logger = LoggerFactory.getLogger(ItemTest.class);
@@ -25,15 +24,14 @@ public class ItemTest extends AbstractTransactionalTestNGSpringContextTests{
 	@Transactional
 	public void getItems(){
 		Item item = new Item();
-		item.setName(RandomStringUtils.randomAlphabetic(10));
-		item.getImages().add(new Image(RandomStringUtils.randomAlphabetic(10), RandomStringUtils.randomAlphabetic(10)));
+		item.setItemName(RandomStringUtils.randomAlphabetic(10));
+		item.getBids().add(new Bid(new BigDecimal(ThreadLocalRandom.current().nextInt(100, 500))));
 		entityManager.persist(item);
 		entityManager.flush();
 		Item persistedItem = entityManager.find(Item.class, item.getId());
-		logger.info(persistedItem.getId()+" "+persistedItem.getName());
-		for(Image persistedImage : persistedItem.getImages()){
-			logger.info("Image name: "+persistedImage.getFileName()+" Image title: "+persistedImage.getTitle());
+		logger.info(persistedItem.getId()+" "+persistedItem.getItemName());
+		for(Bid persistedBid : persistedItem.getBids()){
+			logger.info("Bid ID: "+persistedBid.getId()+" Bid amount:"+persistedBid.getAmount());//TODO:Bid#id is 0. check
 		}
 	}
-	
 }

@@ -1,6 +1,7 @@
 ##JPATEST
-* This application contains tests written for various framework/tools/libraries with more tests planned for the future.
+* This application contains tests written for JPA with Hibernate.
 * The tests are written for commonly used APIs and concepts.
+* The examples are taken from the book [Java persistence with hibernate](http://jpwh.org/)
 
 ##Tools needed
 * [Eclipse](https://eclipse.org/downloads/)
