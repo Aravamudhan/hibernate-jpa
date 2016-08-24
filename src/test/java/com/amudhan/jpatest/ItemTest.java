@@ -11,6 +11,7 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 
+import com.amudhan.jpatest.model.Image;
 import com.amudhan.jpatest.model.Item;
 
 @ContextConfiguration("classpath:configuration/applicationContext-test.xml")
@@ -26,10 +27,14 @@ public class ItemTest extends AbstractTransactionalTestNGSpringContextTests{
 		Item item = new Item();
 		item.setId(new Long(1));
 		item.setName(RandomStringUtils.randomAlphabetic(10));
+		item.getImages().add(new Image(RandomStringUtils.randomAlphabetic(10), RandomStringUtils.randomAlphabetic(10)));
 		entityManager.merge(item);
 		entityManager.flush();
 		Item persistedItem = entityManager.find(Item.class, new Long(1));
 		logger.info(persistedItem.getId()+" "+persistedItem.getName());
+		for(Image persistedImage : persistedItem.getImages()){
+			logger.info("Image name: "+persistedImage.getFileName()+" Image title: "+persistedImage.getTitle());
+		}
 	}
 	
 }
