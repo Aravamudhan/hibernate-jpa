@@ -9,6 +9,7 @@ Servers/
 bin/
 tmp/
 logs/
+test-output/
 *.tmp
 *.bak
 *.swp
