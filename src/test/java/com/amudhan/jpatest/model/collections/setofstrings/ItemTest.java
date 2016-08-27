@@ -3,10 +3,10 @@ package com.amudhan.jpatest.model.collections.setofstrings;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 import org.apache.commons.lang3.RandomStringUtils;
-import com.amudhan.jpatest.SuperItemTest;
+import com.amudhan.jpatest.AbstractItemTest;
 
 
-public class ItemTest extends SuperItemTest{
+public class ItemTest extends AbstractItemTest{
 	@Test
 	@Transactional
 	public void getItems(){

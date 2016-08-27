@@ -7,9 +7,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 
-import com.amudhan.jpatest.SuperItemTest;
+import com.amudhan.jpatest.AbstractItemTest;
 
-public class ItemTest extends SuperItemTest{
+public class ItemTest extends AbstractItemTest{
 	
 	@Test
 	@Transactional

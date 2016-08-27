@@ -1,4 +1,4 @@
-package com.amudhan.jpatest.model.collections.mapofstrings;
+package com.amudhan.jpatest.model.collections.sortedmapofstrings;
 
 import java.util.Map.Entry;
 
@@ -12,7 +12,7 @@ public class ItemTest extends AbstractItemTest {
 	
 	@Test
 	@Transactional
-	public void getItem(){
+	public void getItems(){
 		Item item = new Item();
 		item.setItemName(RandomStringUtils.randomAlphabetic(10));
 		item.getImages().put(RandomStringUtils.randomAlphabetic(3), "BImage");
@@ -27,4 +27,5 @@ public class ItemTest extends AbstractItemTest {
 			logger.info("Image details: "+image.getKey()+":"+image.getValue());
 		}
 	}
+	
 }

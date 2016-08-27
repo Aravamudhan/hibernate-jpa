@@ -9,10 +9,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 
 @ContextConfiguration("classpath:configuration/applicationContext-test.xml")
-public abstract class SuperItemTest extends AbstractTransactionalTestNGSpringContextTests{
+public abstract class AbstractItemTest extends AbstractTransactionalTestNGSpringContextTests{
 	
 	@PersistenceContext
 	protected EntityManager entityManager;
-	protected static final Logger logger = LoggerFactory.getLogger(SuperItemTest.class);
+	protected static final Logger logger = LoggerFactory.getLogger(AbstractItemTest.class);
 	
 }
