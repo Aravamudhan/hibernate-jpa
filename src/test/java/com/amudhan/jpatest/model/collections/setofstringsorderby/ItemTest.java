@@ -1,6 +1,4 @@
-package com.amudhan.jpatest.model.collections.sortedmapofstrings;
-
-import java.util.Map.Entry;
+package com.amudhan.jpatest.model.collections.setofstringsorderby;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.test.annotation.Commit;
@@ -11,22 +9,24 @@ import com.amudhan.jpatest.AbstractItemTest;
 
 public class ItemTest extends AbstractItemTest {
 	
+	/*Priorities with lower number are scheduled first.*/
 	@Test(priority=1)
 	@Transactional
+	/*Committing since the record is fetched in the next test to check the order.*/
 	@Commit
 	public void getItems(){
 		Item item = new Item();
 		item.setItemName(RandomStringUtils.randomAlphabetic(10));
-		item.getImages().put(RandomStringUtils.randomAlphabetic(3), "BImage");
-		item.getImages().put(RandomStringUtils.randomAlphabetic(3), "AImage");
-		item.getImages().put(RandomStringUtils.randomAlphabetic(3), "DImage");
-		item.getImages().put(RandomStringUtils.randomAlphabetic(3), "ZImage");
+		item.getImages().add(RandomStringUtils.randomAlphabetic(3));
+		item.getImages().add(RandomStringUtils.randomAlphabetic(3));
+		item.getImages().add(RandomStringUtils.randomAlphabetic(3));
+		item.getImages().add(RandomStringUtils.randomAlphabetic(3));
 		entityManager.persist(item);
 		entityManager.flush();
 		Item persistedItem = entityManager.find(Item.class, item.getId());
 		logger.info(persistedItem.getId()+" "+persistedItem.getItemName());
-		for(Entry<String, String> image: persistedItem.getImages().entrySet()){
-			logger.info("Image details: "+image.getKey()+":"+image.getValue());
+		for(String image: persistedItem.getImages()){
+			logger.info("Image details: "+image);
 		}
 	}
 	
@@ -35,9 +35,8 @@ public class ItemTest extends AbstractItemTest {
 	public void getItem(){
 		Item persistedItem = entityManager.find(Item.class, new Long(1));
 		logger.info(persistedItem.getId()+" "+persistedItem.getItemName());
-		for(Entry<String, String> image: persistedItem.getImages().entrySet()){
-			logger.info("Image details: "+image.getKey()+":"+image.getValue());
+		for(String image: persistedItem.getImages()){
+			logger.info("Image details: "+image);
 		}
 	}
-	
 }
