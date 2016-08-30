@@ -18,7 +18,9 @@ public class Item extends AbstractItem {
 	@ElementCollection
 	@CollectionTable(name="COLLECTIONS_SETOFSTRINGSORDERBY_IMAGE")
 	@Column(name="FILE_NAME")
-	//The clause must contain an SQL statement. The result is not ordered in the memory, but from the data source.
+	/* The clause must contain an SQL statement. The result is not ordered in the memory, 
+	   but when it is loaded from the data source.
+	*/ 
 	@org.hibernate.annotations.OrderBy( clause = "FILE_NAME ASC")
 	protected Set<String> images = new LinkedHashSet<String>();
 
