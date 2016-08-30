@@ -1,4 +1,4 @@
-package com.amudhan.jpatest.model.collections.setofembeddables;
+package com.amudhan.jpatest.model.collections.bagofembeddables;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -10,20 +10,17 @@ import com.amudhan.jpatest.AbstractItemTest;
 
 public class ItemTest extends AbstractItemTest {
 
-	@Test(priority = 1)
+	@Test( priority = 1)
 	@Transactional
-	/* To test the records added in this method, the transaction is committed. The default is rollback.*/
 	@Commit
-	public void setOfEmbeddableImagesInsert() {
+	public void bagOfEmbeddableImagesInsert(){
 		Item item = new Item();
-		item.setItemName(RandomStringUtils.randomAlphabetic(5));
+		item.setItemName("Random Item name");
 		item.getImages().add(
 				new Image(RandomStringUtils.randomAlphabetic(5),
 						RandomStringUtils.randomAlphabetic(5), RandomUtils
 								.nextInt(100, 200), RandomUtils.nextInt(100,
 								200)));
-		/* Since two objects have the same properties, only one will be added. 
-		 * Without equals and hash code override both will be added to the Set.*/
 		item.getImages().add(new Image("Baz", "baz.jpg", 100, 200));
 		item.getImages().add(new Image("Baz", "baz.jpg", 100, 200));
 		item.getImages().add(new Image("Faz", "faz.jpg", 200, 220));
@@ -35,7 +32,7 @@ public class ItemTest extends AbstractItemTest {
 			logger.info(image.toString());
 		}
 	}
-
+	
 	@Test(priority = 2)
 	@Transactional
 	public void setOfEmbeddableImagesTest() {
@@ -46,5 +43,4 @@ public class ItemTest extends AbstractItemTest {
 			logger.info(image.toString());
 		}
 	}
-
 }
