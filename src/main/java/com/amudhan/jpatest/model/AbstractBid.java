@@ -10,9 +10,11 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class AbstractBid {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected long id;
+	
 	@Column(name="amount")
 	protected BigDecimal amount;
 	
@@ -28,6 +30,5 @@ public abstract class AbstractBid {
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
-	
 	
 }

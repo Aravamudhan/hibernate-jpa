@@ -15,6 +15,9 @@ import com.amudhan.jpatest.model.AbstractBid;
 public class Bid extends AbstractBid{
 	
 	@ManyToOne(fetch = FetchType.LAZY)//Default is EAGER
+	/* By default, the identifier of the entity that is mapped as ManyToOne, will be used as the join column.
+	 * In this case, a column with the name "item_id" will be added to the Bid table, and would be mapped as a foreign key.
+	 * Here it is over ridden to make it not null in the schema By default, this join column is nullable.*/
 	@JoinColumn(name = "ITEM_ID", nullable = false)
 	private Item item;
 
