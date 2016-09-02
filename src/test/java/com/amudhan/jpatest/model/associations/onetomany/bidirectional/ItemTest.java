@@ -20,8 +20,10 @@ public class ItemTest extends AbstractItemTest{
 	public void oneToManyBiItemInsert(){
 		Item item = new Item();
 		item.setItemName(RandomStringUtils.randomAlphabetic(10));
-		item.getBids().add(new Bid(new BigDecimal(ThreadLocalRandom.current().nextInt(100, 500)), item));
+		Bid bid = new Bid(new BigDecimal(ThreadLocalRandom.current().nextInt(100, 500)), item);
+		item.getBids().add(bid);
 		entityManager.persist(item);
+		entityManager.persist(bid);
 		persistedItemId = item.getId();
 	}
 	
