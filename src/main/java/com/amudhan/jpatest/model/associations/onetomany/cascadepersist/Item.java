@@ -12,6 +12,7 @@ import com.amudhan.jpatest.model.AbstractItem;
 
 @Entity(name = "ASSOCIATIONS_ONETOMANY_CASCADEPERSIST_ITEM")
 @Table(name = "ASSOCIATIONS_ONETOMANY_CASCADEPERSIST_ITEM")
+/*item#bids is saved along with the item.*/
 public class Item extends AbstractItem
 {
 	@OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST)

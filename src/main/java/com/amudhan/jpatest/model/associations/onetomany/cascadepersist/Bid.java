@@ -10,8 +10,8 @@ import javax.persistence.Table;
 
 import com.amudhan.jpatest.model.AbstractBid;
 
-@Entity(name="ASSOCIATIONS_ONETOMANY_CASCADEPERSIST_BI_BID")
-@Table(name="ASSOCIATIONS_ONETOMANY_CASCADEPERSIST_BI_BID")
+@Entity(name="ASSOCIATIONS_ONETOMANY_CASCADEPERSIST_BID")
+@Table(name="ASSOCIATIONS_ONETOMANY_CASCADEPERSIST_BID")
 public class Bid extends AbstractBid {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +30,11 @@ public class Bid extends AbstractBid {
 	}
 	public void setItem(Item item) {
 		this.item = item;
+	}
+
+	@Override
+	public String toString() {
+		return "Bid [id=" + id + ", amount=" + amount + "]";
 	}
 
 
