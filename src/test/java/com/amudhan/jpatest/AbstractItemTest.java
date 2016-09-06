@@ -14,5 +14,6 @@ public abstract class AbstractItemTest extends AbstractTransactionalTestNGSpring
 	@PersistenceContext
 	protected EntityManager entityManager;
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractItemTest.class);
+	protected long persistedId;
 	
 }

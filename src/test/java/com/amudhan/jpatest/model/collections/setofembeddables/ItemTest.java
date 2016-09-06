@@ -10,6 +10,7 @@ import com.amudhan.jpatest.AbstractItemTest;
 
 public class ItemTest extends AbstractItemTest {
 
+	
 	@Test(priority = 1)
 	@Transactional
 	/* To test the records added in this method, the transaction is committed. The default is rollback.*/
@@ -28,18 +29,13 @@ public class ItemTest extends AbstractItemTest {
 		item.getImages().add(new Image("Baz", "baz.jpg", 100, 200));
 		item.getImages().add(new Image("Faz", "faz.jpg", 200, 220));
 		entityManager.persist(item);
-		entityManager.flush();
-		logger.info("Item ID: " + item.getId() + " Item name:"
-				+ item.getItemName());
-		for (Image image : item.getImages()) {
-			logger.info(image.toString());
-		}
+		persistedId = item.getId();
 	}
 
 	@Test(priority = 2)
 	@Transactional
 	public void setOfEmbeddableImagesTest() {
-		Item item = entityManager.find(Item.class, new Long(1));
+		Item item = entityManager.find(Item.class, persistedId);
 		logger.info("Item ID: " + item.getId() + " Item name:"
 				+ item.getItemName());
 		for (Image image : item.getImages()) {

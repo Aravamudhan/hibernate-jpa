@@ -46,8 +46,8 @@ public class ItemTest extends AbstractItemTest{
 	@Transactional
 	public void oneToManyBiItemDelete(){
 		Item persistedItem = entityManager.find(Item.class, persistedItemId);
-		
 		for(Bid persistedBid : persistedItem.getBids()){
+			logger.info("Bid details: "+persistedBid);
 		}
 	}
 }
