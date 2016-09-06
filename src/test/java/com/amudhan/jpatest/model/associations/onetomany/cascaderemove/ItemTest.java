@@ -35,6 +35,7 @@ public class ItemTest extends AbstractItemTest {
 			/* The item#bids variable is marked for CascadeType.PERSIST and CascadeType.REMOVE. 
 			 * This triggers persistence of bids, when the item is persisted and the removal when the item is removed.
 			 * */
+			/* The main disadvantage of this method is, all the bids are loaded first, then deleted one by one.*/
 			entityManager.remove(item);
 		}
 	}
