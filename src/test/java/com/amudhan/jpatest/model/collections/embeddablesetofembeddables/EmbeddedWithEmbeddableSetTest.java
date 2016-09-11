@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.AbstractUserTest;
 
-public class UserTest extends AbstractUserTest {
+public class EmbeddedWithEmbeddableSetTest extends AbstractUserTest {
 
 	@Test
 	@Transactional

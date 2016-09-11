@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.AbstractItemTest;
 
-public class ItemTest extends AbstractItemTest {
+public class SetOfEmbeddablesTest extends AbstractItemTest {
 
 	
 	@Test(priority = 1)

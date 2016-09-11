@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.AbstractItemTest;
 
-public class ItemTest extends AbstractItemTest {
+public class MapOfStringEmbeddablesTest extends AbstractItemTest {
 	
 	@Test
 	@Transactional

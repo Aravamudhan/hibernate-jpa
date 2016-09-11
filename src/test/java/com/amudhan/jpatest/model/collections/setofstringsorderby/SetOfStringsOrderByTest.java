@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.AbstractItemTest;
 
-public class ItemTest extends AbstractItemTest {
+public class SetOfStringsOrderByTest extends AbstractItemTest {
 	
 	/*Priorities with lower number are scheduled first.*/
 	@Test(priority=1)
