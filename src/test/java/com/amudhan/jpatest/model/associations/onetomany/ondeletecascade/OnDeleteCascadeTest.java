@@ -1,4 +1,4 @@
-package com.amudhan.jpatest.model.associations.onetomany.cascaderemove;
+package com.amudhan.jpatest.model.associations.onetomany.ondeletecascade;
 
 import java.math.BigDecimal;
 
@@ -8,9 +8,9 @@ import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.AbstractItemTest;
 
-public class ItemTest extends AbstractItemTest {
-	private long persistedItemId;
+public class OnDeleteCascadeTest extends AbstractItemTest {
 
+	private long bidId;
 	@Test(priority = 1)
 	@Transactional
 	@Commit
@@ -22,23 +22,25 @@ public class ItemTest extends AbstractItemTest {
 		item.getBids().add(new Bid(new BigDecimal(300), item));
 		item.getBids().add(new Bid(new BigDecimal(200), item));
 		entityManager.persist(item);
-		persistedItemId = item.getId();
+		persistedId = item.getId();
 	}
 	
 	@Test(priority = 2)
 	@Transactional
 	@Commit
 	public void oneToManyCascadePersistItemRemove(){
-		Item item = entityManager.find(Item.class, persistedItemId);
+		Item item = entityManager.find(Item.class, persistedId);
+		bidId = item.getBids().iterator().next().getId();
 		if(item != null){
 			logger.info("Removing the item");
-			/* The item#bids variable is marked for CascadeType.PERSIST and CascadeType.REMOVE. 
-			 * This triggers persistence of bids, when the item is persisted and the removal when the item is removed.
-			 * */
-			/* The main disadvantage of this method is, all the bids are loaded first, then deleted one by one, instead of deletion by a single query.
-			 * The reason for this is hibernate does not know whether any other record holds a bid as a foreign key.*/
 			entityManager.remove(item);
 		}
 	}
 
+	@Test(priority = 3)
+	@Transactional
+	public void getBid(){
+		Bid bid = entityManager.find(Bid.class, bidId);
+		logger.info("Does the bid with the id "+bidId+" exist ?"+(bid!=null));
+	}
 }

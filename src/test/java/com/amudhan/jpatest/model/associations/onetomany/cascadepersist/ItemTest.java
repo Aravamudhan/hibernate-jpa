@@ -61,7 +61,7 @@ public class ItemTest extends AbstractItemTest {
 			logger.info("Removing the item");
 			 /*The item#bids variable is marked for CascadeType.PERSIST. 
 			 * This triggers persistence of bids, when the item is persisted, but not removal when the item is removed.
-			 * That must be done explicitly if the constraint violation exception needs to be avoided.*/
+			 * That must be done explicitly to avoid constraint violation.*/
 			for(Bid bid : item.getBids()){
 				entityManager.remove(bid);
 			}
