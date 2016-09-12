@@ -14,6 +14,12 @@ public class AbstractUser {
 
 	protected String name;
 	
+	protected AbstractUser(){}
+	
+	protected AbstractUser(String name){
+		this.name = name;
+	}
+	
 	public String getName() {
 		return name;
 	}
