@@ -13,6 +13,7 @@ public class OneToOneSharedPrimaryKeyTest extends AbstractItemTest {
 	@Commit
 	public void oneTOneSharedPrimaryKeyPersist(){
 		Address address = new Address("AB Street", "738373", "Paris");
+		entityManager.persist(address);
 		User user = new User(address.getId(), "Awesome User");
 		user.setShippingAddress(address);
 		entityManager.persist(user);
