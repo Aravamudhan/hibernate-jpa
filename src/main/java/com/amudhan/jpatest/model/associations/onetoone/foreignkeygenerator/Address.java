@@ -12,11 +12,17 @@ import javax.validation.constraints.NotNull;
 @Table( name = "ASSOCIATIONS_ONETOONE_SHAREDPRIMARYKEY_ADDRESS")
 public class Address {
 
+	/* Instead of extending AbstractAddress, created a new Entity.
+	 * Once a id has been defined in the super class it can not be over ridden.
+	 * It is better to leave @Id responsibility to the sub classes in most cases.*/
 	@Id
 	@GeneratedValue(generator = "addressKeyGenerator")
 	@org.hibernate.annotations.GenericGenerator(
 			name = "addressKeyGenerator",
-			/* foreign strategy takes the id of the User reference.*/
+			/* foreign strategy takes the id of the User and assigns that to Address#id.
+			 * The main usage of this strategy is to use the same generated id for both User and Address.
+			 * With out this strategy either User or Address has to be persisted first, then
+			 * the generated id would explicitly be assigned.*/
 			strategy = "foreign",
 			parameters = 
 				@org.hibernate.annotations.Parameter(
