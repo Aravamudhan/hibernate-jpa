@@ -14,6 +14,8 @@ public class OneToOneSharedPrimaryKeyTest extends AbstractItemTest {
 	public void oneTOneSharedPrimaryKeyPersist(){
 		Address address = new Address("AB Street", "738373", "Paris");
 		entityManager.persist(address);
+		/* If User has auto generated id, or uses any other id other the id of the Address, referential integrity constraint violation exception is thrown.
+		 * The reason is Address is marked with @PrimaryKeyJoinColumn*/
 		User user = new User(address.getId(), "Awesome User");
 		user.setShippingAddress(address);
 		entityManager.persist(user);

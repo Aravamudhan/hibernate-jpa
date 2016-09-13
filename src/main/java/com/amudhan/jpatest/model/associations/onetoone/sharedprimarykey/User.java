@@ -9,15 +9,19 @@ import javax.persistence.Table;
 
 @Entity( name = "ASSOCIATIONS_ONETOONE_SHAREDPRIMARYKEY_USER")
 @Table( name = "ASSOCIATIONS_ONETOONE_SHAREDPRIMARYKEY_USER")
+/* Eventhough this is a simpler implementation of OneToOne, the id of the User should match with that of the Address.
+ * Address should be persisted before so that id is generated for the Address.
+ * This is unidirectional from User.*/
 public class User {
 
 	@Id
 	private long id;
 	private String name;
 	@OneToOne(
-		fetch = FetchType.LAZY,//Default is EAGER.
+		fetch = FetchType.LAZY,//Default is EAGER in JPA for OneToOne and ManyToOne.
 		optional = false)
-	/* We are using the primary id of User as a foreign key to the Address.*/
+	/* We are using the generated primary key of the Address as a primary key to User by setting it explicitly.
+	 * This says that the id of this entity(User) serves as the foreign key to the entity(Address) being referenced.*/
 	@PrimaryKeyJoinColumn
 	private Address shippingAddress;
 	
