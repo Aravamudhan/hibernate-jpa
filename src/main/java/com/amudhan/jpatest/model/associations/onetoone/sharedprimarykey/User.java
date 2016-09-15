@@ -20,6 +20,8 @@ public class User {
 	@OneToOne(
 		fetch = FetchType.LAZY,//Default is EAGER in JPA for OneToOne and ManyToOne.
 		optional = false)
+	/* Shared primary key mapping of OneToOne can be used if one of the entities,
+	 * is always stored before the other, and can act as the primary key source.*/
 	/* We are using the generated primary key of the Address as a primary key to User by setting it explicitly.
 	 * This says that the id of this entity(User) serves as the foreign key to the entity(Address) being referenced.*/
 	@PrimaryKeyJoinColumn

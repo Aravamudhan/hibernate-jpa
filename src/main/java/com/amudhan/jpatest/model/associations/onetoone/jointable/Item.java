@@ -8,5 +8,10 @@ import com.amudhan.jpatest.model.AbstractItem;
 @Entity(name = "ASSOCIATIONS_ONETOONE_JOINTABLE_ITEM")
 @Table(name = "ASSOCIATIONS_ONETOONE_JOINTABLE_ITEM")
 public class Item extends AbstractItem {
+
+	public Item(){}
 	
+	public Item(String itemName){
+		super(itemName);
+	}
 }

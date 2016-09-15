@@ -26,6 +26,8 @@ public class User extends AbstractUser {
 	 * This defaults to SHIPPINGADDRESS_ID.
 	 * This creates(or expects) a column named SHIPPINGADDRESS_ID in the User table, and 
 	 * is assigned the id value of the Address entity.*/
+	/* OneToOne using foreign key association should be the default mapping methodology,
+	 * except where the association is optional.*/
 	@JoinColumn(unique = true)
 	private Address shippingAddress;
 

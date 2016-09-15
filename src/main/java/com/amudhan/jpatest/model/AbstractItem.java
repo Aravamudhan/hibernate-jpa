@@ -15,6 +15,12 @@ public abstract class AbstractItem {
 	@Column(name="ITEM_NAME")
 	protected String itemName;
 	
+	protected AbstractItem(){}
+	
+	public AbstractItem(String itemName){
+		this.itemName = itemName;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
