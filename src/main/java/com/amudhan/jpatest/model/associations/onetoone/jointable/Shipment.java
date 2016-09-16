@@ -18,6 +18,8 @@ public class Shipment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	/* The default is eager. That will trigger a left outer join with the join table,
+	 * and an inner join with the inverse join table(user table here).*/
 	@OneToOne(fetch = FetchType.LAZY)
 	/* JoinTable is for specifying an intermediate table.
 	 * When the one-to-one association is optional, JoinTable method
