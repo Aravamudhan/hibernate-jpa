@@ -44,10 +44,14 @@ public class OneToManyBiTest extends AbstractItemTest{
 	
 	@Test(priority = 3)
 	@Transactional
+	@Commit
 	public void oneToManyBiItemDelete(){
+		/* To remove an item, item#bids has to be removed first.
+		 * No cascade is set. Hence deleting item does not remove item#bids.*/
 		Item persistedItem = entityManager.find(Item.class, persistedItemId);
-		for(Bid persistedBid : persistedItem.getBids()){
-			logger.info("Bid details: "+persistedBid);
+		for(Bid bid : persistedItem.getBids()){
+			entityManager.remove(bid);
 		}
+		entityManager.remove(persistedItem);
 	}
 }
