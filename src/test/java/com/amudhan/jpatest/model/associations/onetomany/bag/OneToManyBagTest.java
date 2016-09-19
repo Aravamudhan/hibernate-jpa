@@ -24,8 +24,7 @@ public class OneToManyBagTest extends AbstractItemTest {
 		 * which have many to one relationship with this item. The reason is mappedBy from the 
 		 * OneToMany side. When hibernate sees this annotation, it knows that the relationship is
 		 * maintained by the ManyToOne side. Hence generates a query to fetch all the bids,
-		 * using the bid entity, when item.getBids is called, instead of using the item
-		 * entity.*/
+		 * using the bid entity/bid table, instead of from ITEM_BID join table.*/
 		entityManager.persist(item);
 		entityManager.persist(bidOne);
 		entityManager.persist(bidTwo);
@@ -43,7 +42,8 @@ public class OneToManyBagTest extends AbstractItemTest {
 	public void oneToManyBagDisplay(){
 		Item item = entityManager.find(Item.class, persistedId);
 		logger.info(item.getId()+" "+item.getItemName());
-		/* This loads all the bids that have ManyToOne relationship with item.*/
+		/* This loads all the bids that have ManyToOne relationship with item from the bid table.
+		 * If no mappedBy is present, the generated query would point to a join table.*/
 		for(Bid bid : item.getBids()){
 			logger.info(bid.getId()+" "+bid.getAmount());
 		}
