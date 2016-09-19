@@ -21,8 +21,11 @@ public class OneToManyBagTest extends AbstractItemTest {
 		item.setItemName("Awesome Item");
 		/* Note that no bid is added to the item entity.
 		 * Even then, when item.getBids is called, in another transaction, it loads all the bids
-		 * which have many to one relationship with this item.
-		 * To enforce this, item#bids should be marked non optional .*/
+		 * which have many to one relationship with this item. The reason is mappedBy from the 
+		 * OneToMany side. When hibernate sees this annotation, it knows that the relationship is
+		 * maintained by the ManyToOne side. Hence generates a query to fetch all the bids,
+		 * using the bid entity, when item.getBids is called, instead of using the item
+		 * entity.*/
 		entityManager.persist(item);
 		entityManager.persist(bidOne);
 		entityManager.persist(bidTwo);

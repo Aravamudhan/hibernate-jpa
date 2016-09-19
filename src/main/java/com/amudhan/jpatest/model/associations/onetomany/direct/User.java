@@ -1,4 +1,4 @@
-package com.amudhan.jpatest.model.associations.onetomany.jointable;
+package com.amudhan.jpatest.model.associations.onetomany.direct;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,11 +9,14 @@ import javax.persistence.Table;
 
 import com.amudhan.jpatest.model.AbstractUser;
 
-@Entity(name = "ASSOCIATIONS_ONETOMANY_JOINTABLE_USER")
-@Table(name = "ASSOCIATIONS_ONETOMANY_JOINTABLE_USER")
+@Entity(name = "ASSOCIATIONS_ONETOMANY_USER")
+@Table(name = "ASSOCIATIONS_ONETOMANY_USER")
 public class User extends AbstractUser {
 
-	@OneToMany(mappedBy = "buyer")
+	/* If mappedBy does not exist hibernate creates a new join table, to maintain
+	 * the User#boughtItems relationship. Hibernate does not know whether Item#buyer
+	 * exists on the other side.*/
+	@OneToMany// (mappedBy = "buyer")
 	private Set<Item> boughtItems = new HashSet<Item>();
 
 	public Set<Item> getBoughtItems() {
