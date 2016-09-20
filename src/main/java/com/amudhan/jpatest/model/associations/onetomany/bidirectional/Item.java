@@ -16,6 +16,9 @@ public class Item extends AbstractItem{
 	
 	/*OneToMany is required here to access the other side of the relationship.
 	 * This generates SELECT * FROM BID WHERE ITEM_ID = :ITEM_ID*/
+	/* In a bidirectional relationship, one side must be mapped by other side.
+	 * This means, it's mapping settings are ignored and the other side's
+	 * settings take precedence.*/
 	@OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
 	private Set<Bid> bids = new HashSet<Bid>();//Always it is safer to initialize
 
