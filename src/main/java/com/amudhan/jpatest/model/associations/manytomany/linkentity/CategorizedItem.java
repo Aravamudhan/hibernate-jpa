@@ -31,7 +31,9 @@ public class CategorizedItem {
 
 	/* Instead of ManyToMany association between tables, two ManyToOne associations 
 	 * to an intervening table is desirable, if there is a chance that the relationship
-	 * should contain more information. Here addedBy, addedOn is required. */
+	 * should contain more information like addedBy, addedOn.*/
+	/* One disadvantage is bit complex code, that needs to separately maintain the link 
+	 * records and destroy when necessary.*/
 	@ManyToOne
 	@JoinColumn(
 			name = "CATEGORY_ID",
