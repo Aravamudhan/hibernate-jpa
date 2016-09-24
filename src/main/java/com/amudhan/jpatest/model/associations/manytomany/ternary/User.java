@@ -9,4 +9,9 @@ import com.amudhan.jpatest.model.AbstractUser;
 @Table(name = "ASSOCIATIONS_MANYTOMANY_TERNARY_USER")
 public class User extends AbstractUser {
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + "]";
+	}
+
 }

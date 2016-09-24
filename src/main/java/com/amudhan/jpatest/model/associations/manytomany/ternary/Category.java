@@ -24,7 +24,7 @@ public class Category {
 	
 	@ElementCollection
 	@CollectionTable(
-				name = "CATEGORY_ITEM",
+				name = "MANYTOMANY_TERNARY_CATEGORY_ITEM",
 				joinColumns = @JoinColumn(name = "CATEGORY_ID")
 			)
 	private Set<CategorizedItem> categorizedItems = new HashSet<CategorizedItem>();

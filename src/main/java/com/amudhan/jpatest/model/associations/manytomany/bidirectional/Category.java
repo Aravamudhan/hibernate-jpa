@@ -26,6 +26,8 @@ public class Category {
 	/* Apart from Persist, other options do not make sense.*/
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	/* Link table creation*/
+	/* Only one side can be owner, hence making Category the owner of the association.
+	 * It can be made bidirectional by having mappedBy from the Item.*/
 	@JoinTable(
 			name = "CATEGORY_ITEM",
 			/* The primary key is the combination of both the keys.*/
