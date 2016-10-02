@@ -6,14 +6,11 @@
     </Console>
   </Appenders>
   <Loggers>
-    <Logger name="org.hibernate.type" level="trace" additivity="false">
+    <!-- <Logger name="org.hibernate.type" level="trace" additivity="false">
       <appenderRef ref="STDOUT" />
-    </Logger>
+    </Logger> -->
     <Logger name="org.hibernate.SQL" level="trace" additivity="false">
       <appenderRef ref="STDOUT"/>	
-    </Logger>
-    <Logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" additivity="false">
-      <appenderRef ref="STDOUT"/>
     </Logger>
     <Root level="info">
       <appenderRef ref="STDOUT" />

@@ -4,19 +4,38 @@
   xsi:schemaLocation="http://xmlns:jcp.org/xml/ns/persistence
   http://xmlns.jcp.org/xml/ns/persistence_2_1.xsd">
 
-  <!-- persistence.xml must configure atleast one persistance unit. -->  
-  <persistence-unit name="HelloWorldPU">
+ 	<!-- persistence.xml must configure atleast one persistance unit. -->  
+  	<persistence-unit name="HelloWorldPU">
     
-    <!-- database connection -->
-    <jta-data-source>dataSourceOne</jta-data-source>
+    	<!-- database connection -->
+    	<jta-data-source>dataSourceOne</jta-data-source>
     
-    <class>com.amudhan.jpatest.model.helloworld.Message</class>
+    	<class>com.amudhan.jpatest.model.helloworld.Message</class>
     
-    <!-- This setting disables the feature of scanning the class path and automatically
-    adding the entities to the persistence context. -->
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
-    <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"></property>
-    </properties>
-  </persistence-unit>	
+	    <!-- This setting disables the feature of scanning the class path and automatically
+    	adding the entities to the persistence context. -->
+    	<exclude-unlisted-classes>true</exclude-unlisted-classes>
+    	<properties>
+      		<property name="javax.persistence.schema-generation.database.action"
+      			value="drop-and-create"></property>
+    	</properties>
+  	</persistence-unit>
+  	<persistence-unit name="CustomSchemaPU">
+    	<jta-data-source>dataSourceOne</jta-data-source>
+    	<class>com.amudhan.jpatest.model.complexschemas.custom.User</class>
+    	<exclude-unlisted-classes>true</exclude-unlisted-classes>
+    	<properties>
+    		<property name = "hibernate.hbm2ddl.import_files_sql_extractor"
+    			value="org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor"></property>
+    		<property name="javax.persistence.schema-generation.create-source"
+                      value="script-then-metadata"/>
+            <property name="javax.persistence.schema-generation.drop-source"
+                      value="metadata-then-script"/>
+        	<property name="javax.persistence.schema-generation.create-script-source"
+                      value="complexschemas/CreateScript.sql.txt"/>
+            <property name="javax.persistence.schema-generation.drop-script-source"
+                      value="complexschemas/DropScript.sql.txt"/>
+    	</properties>
+  	</persistence-unit>
+  	
 </persistence>

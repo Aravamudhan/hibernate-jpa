@@ -1,0 +1,1 @@
+create domain if not exists EMAIL_ADDRESS as VARCHAR check (position('@', value) > 1);

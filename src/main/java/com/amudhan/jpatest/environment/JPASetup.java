@@ -7,8 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.hibernate.annotations.common.util.StringHelper;
-
 public class JPASetup {
 
   protected final String persistenceUnitName;
@@ -17,8 +15,8 @@ public class JPASetup {
   
   public JPASetup(DatabaseProduct databaseProduct, String persistenceUnitName, String... hbmResources){
 	  this.persistenceUnitName = persistenceUnitName;
+	  /*Check the possible settings and their in the org.hibernate.cfg.AvailableSettings*/
 	  properties.put("hibernate.archive.autodetection", "none");
-      properties.put("hibernate.hbmxml.files",StringHelper.join(",", hbmResources != null ? hbmResources : new String[0]));
       properties.put("hibernate.format_sql", "true");
       properties.put("hibernate.use_sql_comments", "true");
       properties.put("hibernate.dialect", databaseProduct.hibernateDialect);
