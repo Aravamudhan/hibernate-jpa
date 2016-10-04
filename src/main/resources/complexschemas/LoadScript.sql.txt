@@ -1,0 +1,2 @@
+alter table COMPLEXSCHEMAS_CUSTOM_BID add constraint AUCTION_BID_TIME
+	check(CREATEDON <= (select i.AUCTIONEND from COMPLEXSCHEMAS_CUSTOM_ITEM i where i.ID = ITEM_ID ));

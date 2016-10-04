@@ -1,5 +1,8 @@
 package com.amudhan.jpatest.model.complexschemas.custom;
 
+import static org.testng.Assert.assertEquals;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.EntityManager;
@@ -143,6 +146,58 @@ public class CustomSchema extends TransactionManagerTest {
 			throw unwrapCauseOfType(e, org.hibernate.exception.ConstraintViolationException.class);
 		} finally {
 			tx.rollback();
+		}
+	}
+
+	@Test(expectedExceptions = org.hibernate.exception.ConstraintViolationException.class)
+	public void checkSubSelectConstraint() throws Throwable {
+		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+		try {
+			tx.begin();
+			EntityManager entityManager = jpa.createEntityManager();
+			Item item = new Item("A great item", LocalDateTime.now(), LocalDateTime.now().plusDays(1));
+			Bid bid = new Bid(new BigDecimal(10), item);
+			//This will fail since the CREATEDON time of the bid is after the AUCTIONEND.
+			bid.setCreatedOn(LocalDateTime.now().plusDays(2));
+			entityManager.persist(item);
+			entityManager.persist(bid);
+			entityManager.flush();
+		} catch (Exception e) {
+			throw unwrapCauseOfType(e, org.hibernate.exception.ConstraintViolationException.class);
+		} finally {
+			tx.rollback();
+		}
+	}
+
+	@Test
+	public void storeAndLoad() throws Exception {
+		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+		try {
+			tx.begin();
+			EntityManager em = jpa.createEntityManager();
+
+			User user = new User();
+			user.setEmail("valid@test.com");
+			user.setUserName("someuser");
+			em.persist(user);
+
+			user = new User();
+			user.setEmail("valid2@test.com");
+			user.setUserName("otheruser");
+			em.persist(user);
+
+			tx.commit();
+			em.close();
+
+			tx.begin();
+			em = jpa.createEntityManager();
+			user = em.find(User.class, user.getId());
+			assertEquals(user.getUserName(), "otheruser");
+			tx.commit();
+			em.close();
+
+		} catch (Exception e) {
+			logger.info("Exception in storeAndLoad " + e);
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,16 +22,18 @@ public class Bid {
 	@NotNull
 	private BigDecimal amount;
 
+	/* It is a best practice to name constraints. Makes for readable logs/error messages.*/
 	@ManyToOne
-	@JoinColumn(name = "ITEM_ID", nullable = false)
+	@JoinColumn(name = "ITEM_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_ITEM_ID"))
 	private Item item;
 
 	@NotNull
 	private LocalDateTime createdOn;
-	
-	public Bid(){}
-	
-	public Bid(BigDecimal amount, Item item){
+
+	public Bid() {
+	}
+
+	public Bid(BigDecimal amount, Item item) {
 		this.amount = amount;
 		this.item = item;
 	}

@@ -37,6 +37,9 @@
                       value="complexschemas/CreateScript.sql.txt"/>
             <property name="javax.persistence.schema-generation.drop-script-source"
                       value="complexschemas/DropScript.sql.txt"/>
+             <!-- This load script adds constraint-->         
+        	<property name="javax.persistence.sql-load-script-source"
+                      value="complexschemas/LoadScript.sql.txt"/>
     	</properties>
   	</persistence-unit>
   	
