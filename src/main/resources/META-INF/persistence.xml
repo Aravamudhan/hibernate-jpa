@@ -23,6 +23,8 @@
   	<persistence-unit name="CustomSchemaPU">
     	<jta-data-source>dataSourceOne</jta-data-source>
     	<class>com.amudhan.jpatest.model.complexschemas.custom.User</class>
+    	<class>com.amudhan.jpatest.model.complexschemas.custom.Item</class>
+    	<class>com.amudhan.jpatest.model.complexschemas.custom.Bid</class>
     	<exclude-unlisted-classes>true</exclude-unlisted-classes>
     	<properties>
     		<property name = "hibernate.hbm2ddl.import_files_sql_extractor"
