@@ -42,5 +42,10 @@
                       value="complexschemas/LoadScript.sql.txt"/>
     	</properties>
   	</persistence-unit>
+  	<persistence-unit name = "NaturalPrimaryKeyPU">
+  		<jta-data-source>dataSourceOne</jta-data-source>
+  		<class>com.amudhan.jpatest.model.complexschemas.naturalprimarykey.User</class>
+  		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+  	</persistence-unit>
   	
 </persistence>

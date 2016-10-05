@@ -5,21 +5,33 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity(name = "COMPLEXSCHEMAS_CUSTOM_USER")
 /*
- * This is an example for column constraints. userName has constraint on its
+ * This entity contains an example for column constraints. userName has constraint on its
  * value. For email, constraint has been enforced by the creation of EMAIL
- * domain.
+ * domain in the file "CreateScript.sql.txt".
  */
 /* By using @UniqueConstraints, an "unique constraint" can span multiple columns. */
 @Table(
 		name = "COMPLEXSCHEMAS_CUSTOM_USER",
+		indexes = {
+				@Index(
+						name = "INDEX_USERNAME",
+						columnList = "USERNAME"
+				),
+				@Index(
+						name = "INDEX_USERNAME_EMAIL",
+						columnList = "USERNAME, EMAIL"
+				)
+		},
 		uniqueConstraints = @UniqueConstraint(
 				name = "UNIQUE_USERNAME_EMAIL",
-				columnNames = {"USERNAME","EMAIL"}))
+				columnNames = {"USERNAME","EMAIL"})
+		)
 public class User {
 
 	@Id
