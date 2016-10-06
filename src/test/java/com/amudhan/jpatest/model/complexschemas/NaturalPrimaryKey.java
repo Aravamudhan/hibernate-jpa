@@ -1,4 +1,4 @@
-package com.amudhan.jpatest.model.complexschemas.naturalprimarykey;
+package com.amudhan.jpatest.model.complexschemas;
 
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
@@ -12,6 +12,7 @@ import static org.testng.Assert.assertNotNull;
 import com.amudhan.jpatest.environment.DatabaseProduct;
 import com.amudhan.jpatest.environment.JPASetup;
 import com.amudhan.jpatest.environment.TransactionManagerTest;
+import com.amudhan.jpatest.model.complexschemas.naturalprimarykey.User;
 
 public class NaturalPrimaryKey extends TransactionManagerTest{
 

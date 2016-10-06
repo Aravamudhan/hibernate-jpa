@@ -47,5 +47,10 @@
   		<class>com.amudhan.jpatest.model.complexschemas.naturalprimarykey.User</class>
   		<exclude-unlisted-classes>true</exclude-unlisted-classes>
   	</persistence-unit>
+  	<persistence-unit name="CompositeKeyEmbeddedId">
+  		<jta-data-source>dataSourceOne</jta-data-source>
+  		<class>com.amudhan.jpatest.model.complexschemas.compositekey.embedded.User</class>
+  		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+  	</persistence-unit>
   	
 </persistence>

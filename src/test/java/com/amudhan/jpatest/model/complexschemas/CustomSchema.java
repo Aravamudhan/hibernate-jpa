@@ -1,4 +1,4 @@
-package com.amudhan.jpatest.model.complexschemas.custom;
+package com.amudhan.jpatest.model.complexschemas;
 
 import static org.testng.Assert.assertEquals;
 
@@ -16,6 +16,9 @@ import org.testng.annotations.Test;
 import com.amudhan.jpatest.environment.DatabaseProduct;
 import com.amudhan.jpatest.environment.JPASetup;
 import com.amudhan.jpatest.environment.TransactionManagerTest;
+import com.amudhan.jpatest.model.complexschemas.custom.Bid;
+import com.amudhan.jpatest.model.complexschemas.custom.Item;
+import com.amudhan.jpatest.model.complexschemas.custom.User;
 
 public class CustomSchema extends TransactionManagerTest {
 
