@@ -1,56 +1,63 @@
 <persistence version="2.1"
-  xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://xmlns:jcp.org/xml/ns/persistence
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns:jcp.org/xml/ns/persistence
   http://xmlns.jcp.org/xml/ns/persistence_2_1.xsd">
 
- 	<!-- persistence.xml must configure atleast one persistance unit. -->  
-  	<persistence-unit name="HelloWorldPU">
-    
-    	<!-- database connection -->
-    	<jta-data-source>dataSourceOne</jta-data-source>
-    
-    	<class>com.amudhan.jpatest.model.helloworld.Message</class>
-    
-	    <!-- This setting disables the feature of scanning the class path and automatically
-    	adding the entities to the persistence context. -->
-    	<exclude-unlisted-classes>true</exclude-unlisted-classes>
-    	<properties>
-      		<property name="javax.persistence.schema-generation.database.action"
-      			value="drop-and-create"></property>
-    	</properties>
-  	</persistence-unit>
-  	<persistence-unit name="CustomSchemaPU">
-    	<jta-data-source>dataSourceOne</jta-data-source>
-    	<class>com.amudhan.jpatest.model.complexschemas.custom.User</class>
-    	<class>com.amudhan.jpatest.model.complexschemas.custom.Item</class>
-    	<class>com.amudhan.jpatest.model.complexschemas.custom.Bid</class>
-    	<exclude-unlisted-classes>true</exclude-unlisted-classes>
-    	<properties>
-    		<property name = "hibernate.hbm2ddl.import_files_sql_extractor"
-    			value="org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor"></property>
-    		<property name="javax.persistence.schema-generation.create-source"
-                      value="script-then-metadata"/>
-            <property name="javax.persistence.schema-generation.drop-source"
-                      value="metadata-then-script"/>
-        	<property name="javax.persistence.schema-generation.create-script-source"
-                      value="complexschemas/CreateScript.sql.txt"/>
-            <property name="javax.persistence.schema-generation.drop-script-source"
-                      value="complexschemas/DropScript.sql.txt"/>
-             <!-- This load script adds constraint-->         
-        	<property name="javax.persistence.sql-load-script-source"
-                      value="complexschemas/LoadScript.sql.txt"/>
-    	</properties>
-  	</persistence-unit>
-  	<persistence-unit name = "NaturalPrimaryKeyPU">
-  		<jta-data-source>dataSourceOne</jta-data-source>
-  		<class>com.amudhan.jpatest.model.complexschemas.naturalprimarykey.User</class>
-  		<exclude-unlisted-classes>true</exclude-unlisted-classes>
-  	</persistence-unit>
-  	<persistence-unit name="CompositeKeyEmbeddedId">
-  		<jta-data-source>dataSourceOne</jta-data-source>
-  		<class>com.amudhan.jpatest.model.complexschemas.compositekey.embedded.User</class>
-  		<exclude-unlisted-classes>true</exclude-unlisted-classes>
-  	</persistence-unit>
-  	
+	<!-- persistence.xml must configure atleast one persistance unit. -->
+	<persistence-unit name="HelloWorldPU">
+
+		<!-- database connection -->
+		<jta-data-source>dataSourceOne</jta-data-source>
+
+		<class>com.amudhan.jpatest.model.helloworld.Message</class>
+
+		<!-- This setting disables the feature of scanning the class path and automatically 
+			adding the entities to the persistence context. -->
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+			<property name="javax.persistence.schema-generation.database.action"
+				value="drop-and-create"></property>
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="CustomSchemaPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.complexschemas.custom.User</class>
+		<class>com.amudhan.jpatest.model.complexschemas.custom.Item</class>
+		<class>com.amudhan.jpatest.model.complexschemas.custom.Bid</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+			<property name="hibernate.hbm2ddl.import_files_sql_extractor"
+				value="org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor"></property>
+			<property name="javax.persistence.schema-generation.create-source"
+				value="script-then-metadata" />
+			<property name="javax.persistence.schema-generation.drop-source"
+				value="metadata-then-script" />
+			<property name="javax.persistence.schema-generation.create-script-source"
+				value="complexschemas/CreateScript.sql.txt" />
+			<property name="javax.persistence.schema-generation.drop-script-source"
+				value="complexschemas/DropScript.sql.txt" />
+			<!-- This load script adds constraint -->
+			<property name="javax.persistence.sql-load-script-source"
+				value="complexschemas/LoadScript.sql.txt" />
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="NaturalPrimaryKeyPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.complexschemas.naturalprimarykey.User
+		</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+	</persistence-unit>
+	<persistence-unit name="CompositeKeyEmbeddedId">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.complexschemas.compositekey.embedded.User
+		</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+	</persistence-unit>
+	<persistence-unit name="CompositeKeyMapsId">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.complexschemas.compositekey.mapsid.User</class>
+		<class>com.amudhan.jpatest.model.complexschemas.compositekey.mapsid.Department</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+	</persistence-unit>
+
 </persistence>

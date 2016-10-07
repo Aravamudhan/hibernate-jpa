@@ -4,8 +4,8 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Entity(name = "COMPLEXSCHEMAS_COMPOSITEKEY_EMBEDED_USER")
-@Table(name = "COMPLEXSCHEMAS_COMPOSITEKEY_EMBEDED_USER")
+@Entity(name = "COMPLEXSCHEMAS_COMPOSITEKEY_EMBEDDED_USER")
+@Table(name = "COMPLEXSCHEMAS_COMPOSITEKEY_EMBEDDED_USER")
 public class User {
 
 	@EmbeddedId
