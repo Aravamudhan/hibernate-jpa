@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Embeddable;
 
+/* This serves as a composite key to the User entity.*/
 @Embeddable
 public class UserId implements Serializable {
 
@@ -15,6 +16,12 @@ public class UserId implements Serializable {
 	public UserId() {
 	}
 
+	/* The departmentNumber will be ignored by Hibernate since the User
+	 * entity has a ManyToOne relationship with Department with "departmentNumber"
+	 * in the MapsId annotation. This is called derived identifier mapping.
+	 * This means that a Department entity must be saved before a User and
+	 * the id generated for that Department will be used as the value for the
+	 * departmentNumber field in the composite key.*/
 	public UserId(String userName, Long departmentNumber) {
 		this.userName = userName;
 		this.departmentNumber = departmentNumber;

@@ -14,14 +14,19 @@ public class User {
 	private UserId id;
 
 	@ManyToOne
-	@MapsId("departmentId")
+	/* Signifies that the departmentNumber field in the UserId will be
+	 * receiving the id generated when a Department is saved.*/
+	@MapsId("departmentNumber")
 	private Department department;
+	
+	private String userType; 
 
 	public User() {
 	}
 
-	public User(UserId id) {
+	public User(UserId id, String userType) {
 		this.id = id;
+		this.userType = userType;
 	}
 
 	public UserId getId() {
@@ -40,9 +45,17 @@ public class User {
 		this.department = department;
 	}
 	
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + "]";
+		return "User [id=" + id + " userType = "+userType+"]";
 	}
 
 }

@@ -35,7 +35,11 @@ public class CompositeKeyMapsId extends TransactionManagerTest {
 			EntityManager entityManager = jpa.createEntityManager();
 			Department department = new Department("Greate department");
 			entityManager.persist(department);
-			User user = new User(new UserId("Awesome User", null));
+			/* Since the departmentNumber of UserId is a @MapsId, hibernate
+			 * manages that using the department added to User. null here does not
+			 * throw ConstraintViolationException because of that. Hibernate
+			 * will ignore what ever value that would be set for departmentNumber.*/
+			User user = new User(new UserId("Awesome User", null), "Buyer");
 			user.setDepartment(department);
 			entityManager.persist(user);
 			tx.commit();

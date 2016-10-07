@@ -18,6 +18,7 @@ public class JPASetup {
 	  /*Check the possible settings and their in the org.hibernate.cfg.AvailableSettings*/
 	  properties.put("hibernate.archive.autodetection", "none");
       properties.put("hibernate.format_sql", "true");
+      properties.put("hibernate.show_sql", "true");
       properties.put("hibernate.use_sql_comments", "true");
       properties.put("hibernate.dialect", databaseProduct.hibernateDialect);
       entityManagerFactory = Persistence.createEntityManagerFactory(getPersistenceUnitName(), properties);
