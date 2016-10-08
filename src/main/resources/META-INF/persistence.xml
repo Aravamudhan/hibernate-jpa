@@ -64,5 +64,15 @@
 		<class>com.amudhan.jpatest.model.complexschemas.compositekey.readonly.User</class>
 		<class>com.amudhan.jpatest.model.complexschemas.compositekey.readonly.Department</class>
 	</persistence-unit>
+	<persistence-unit name="CompositeKeyManyToOne">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.complexschemas.compositekey.manytoone.User</class>
+		<class>com.amudhan.jpatest.model.complexschemas.compositekey.manytoone.Item</class>
+	</persistence-unit>
+	<persistence-unit name="NaturalForeignKeyPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.complexschemas.naturalforeignkey.User</class>
+		<class>com.amudhan.jpatest.model.complexschemas.naturalforeignkey.Item</class>
+	</persistence-unit>
 
 </persistence>

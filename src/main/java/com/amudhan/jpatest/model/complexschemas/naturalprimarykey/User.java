@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /* In the legacy tables (composite) natural keys such as name are used extensively as the primary key.*/
-@Entity(name = "COMPLEXSCHEMAS_NATURALPRIMARYKEY")
+@Entity(name = "COMPLEXSCHEMAS_NATURALPRIMARYKEY_USER")
 public class User {
 
 	@Id
