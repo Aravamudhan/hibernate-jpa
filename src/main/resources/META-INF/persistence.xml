@@ -59,5 +59,10 @@
 		<class>com.amudhan.jpatest.model.complexschemas.compositekey.mapsid.Department</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>
+	<persistence-unit name="CompositeKeyReadOnly">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.complexschemas.compositekey.readonly.User</class>
+		<class>com.amudhan.jpatest.model.complexschemas.compositekey.readonly.Department</class>
+	</persistence-unit>
 
 </persistence>
