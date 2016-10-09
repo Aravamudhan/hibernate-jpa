@@ -18,7 +18,11 @@ public class Item {
 	private Long id;
 	
 	private String name;
-	
+	/* Only rule for foreign key/join columns are the source column type
+	 * and the target column type must be same. The foreign key need not
+	 * be the primary key of the target table. It does not even have to be
+	 * a column with unique constraint. Although this behavior is not desirable
+	 * this is sometimes the case in the legacy databases.*/
 	@NotNull
 	@ManyToOne
 	@JoinColumn(

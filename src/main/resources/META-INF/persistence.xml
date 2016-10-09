@@ -74,5 +74,9 @@
 		<class>com.amudhan.jpatest.model.complexschemas.naturalforeignkey.User</class>
 		<class>com.amudhan.jpatest.model.complexschemas.naturalforeignkey.Item</class>
 	</persistence-unit>
+	<persistence-unit name="SecondaryTablePU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.complexschemas.secondarytable.User</class>
+	</persistence-unit>
 
 </persistence>
