@@ -43,9 +43,14 @@ public class NaturalForeignKey extends TransactionManagerTest {
 			EntityManager entityManagerAnother = jpa.createEntityManager();
 			User userTwo = entityManagerAnother.find(User.class, userOne.getId());
 			assertNotNull(userTwo);
+			/* Once an entity is returned by running a query, that entity becomes
+			 * part of the persistent context. What ever changes made to that entity
+			 * in the transaction is synchronized with the database during flush or 
+			 * when the transction ends.*/
 			Item itemTwo = (Item)entityManagerAnother.
 					createQuery("select i from COMPLEXSCHEMAS_NATURALFOREIGNKEY_ITEM i where i.seller = :s").
 					setParameter("s", userTwo).getSingleResult();
+			itemTwo.setName("Greatest of items");
 			assertNotNull(itemTwo);
 			tx.commit();
 			entityManagerAnother.close();
