@@ -1,6 +1,7 @@
 package com.amudhan.jpatest.model.simple;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -256,7 +257,12 @@ public class SimpleTransitions extends JPASetupTest {
 			TRANSACTION_MANAGER.rollback();
 		}
 	}
-	
+	/* This is useful in multithreaded environments.
+	 * If there is a chance that certain values in the PC must always
+	 * be in synchrony with the database in a concurrent environment,
+	 * refresh must be called. Calling refresh on an entity triggers
+	 * SELECT and any changes made to that entity in the transaction
+	 * that is not flushed, will be overwritten. */
 	@Test
 	public void refresh() throws Exception {
 		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
@@ -287,8 +293,8 @@ public class SimpleTransitions extends JPASetupTest {
                         session.doWork(new Work() {
                             @Override
                             public void execute(Connection con) throws SQLException {
-                                PreparedStatement ps = con.prepareStatement("update ITEM set name = ? where ID = ?");
-                                ps.setString(1, "Concurrent Update Name");
+                                PreparedStatement ps = con.prepareStatement("update SIMPLE_ITEM set name = ? where ID = ?");
+                                ps.setString(1, "Concurrent Update item name");
                                 ps.setLong(2, someItemId);
 
                                 /* Alternative: you get an EntityNotFoundException on refresh
@@ -311,7 +317,10 @@ public class SimpleTransitions extends JPASetupTest {
                     return null;
                 }
             }).get();
-            
+            String oldName = item.getName();
+            em.refresh(item);
+            assertNotEquals(item.getName(), oldName);
+            assertEquals(item.getName(), "Concurrent Update item name");
 			tx.commit();
 			em.close();
 			
