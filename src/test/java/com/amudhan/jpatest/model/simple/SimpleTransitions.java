@@ -2,17 +2,23 @@ package com.amudhan.jpatest.model.simple;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceUnitUtil;
 import javax.transaction.UserTransaction;
 
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
@@ -247,6 +253,69 @@ public class SimpleTransitions extends JPASetupTest {
 			em.close();
 
 		} finally {
+			TRANSACTION_MANAGER.rollback();
+		}
+	}
+	
+	@Test
+	public void refresh() throws Exception {
+		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+		try{
+			tx.begin();
+			EntityManager em = jpaSetup.createEntityManager();
+			Item someItem = new Item();
+			someItem.setName("Some item");
+			em.persist(someItem);
+			tx.commit();
+			em.close();
+			Long someItemId = someItem.getId();
+			tx.begin();
+			em = jpaSetup.createEntityManager();
+			Item item = em.find(Item.class, someItemId);
+			item.setName("Some name");
+			
+			// Someone updates this row in the database!
+            Executors.newSingleThreadExecutor().submit(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+                    try {
+                        tx.begin();
+                        EntityManager em = jpaSetup.createEntityManager();
+
+                        Session session = em.unwrap(Session.class);
+                        session.doWork(new Work() {
+                            @Override
+                            public void execute(Connection con) throws SQLException {
+                                PreparedStatement ps = con.prepareStatement("update ITEM set name = ? where ID = ?");
+                                ps.setString(1, "Concurrent Update Name");
+                                ps.setLong(2, someItemId);
+
+                                /* Alternative: you get an EntityNotFoundException on refresh
+                                PreparedStatement ps = con.prepareStatement("delete from ITEM where ID = ?");
+                                ps.setLong(1, ITEM_ID);
+                                */
+
+                                if (ps.executeUpdate() != 1)
+                                    throw new SQLException("ITEM row was not updated");
+                            }
+                        });
+
+                        tx.commit();
+                        em.close();
+
+                    } catch (Exception ex) {
+                    	TRANSACTION_MANAGER.rollback();
+                        throw new RuntimeException("Concurrent operation failure: " + ex, ex);
+                    }
+                    return null;
+                }
+            }).get();
+            
+			tx.commit();
+			em.close();
+			
+		}finally{
 			TRANSACTION_MANAGER.rollback();
 		}
 	}
