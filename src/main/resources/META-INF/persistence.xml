@@ -85,6 +85,13 @@
 	 	<class>com.amudhan.jpatest.model.simple.Category</class>
 	 	<class>com.amudhan.jpatest.model.simple.Item</class>
 	 	<class>com.amudhan.jpatest.model.simple.User</class>
+	 	<properties>
+	 	<!--With the use_identifier_rollback set to true, if remove is called on an entity,
+	 	 	the identifier is reset. null for Long, 0 for long.
+	 	 	The entity becomes totally transient. If this is not set,
+	 	 	the entity will still hold its identifier value. -->
+	 		<!-- <property name="hibernate.use_identifier_rollback" value="true"/> -->
+	 	</properties>
 	</persistence-unit>
 
 </persistence>
