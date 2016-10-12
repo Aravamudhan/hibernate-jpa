@@ -1,11 +1,10 @@
 package com.amudhan.jpatest.model.simple;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,8 +21,6 @@ import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.environment.JPASetupTest;
@@ -35,20 +32,6 @@ public class SimpleTransitions extends JPASetupTest {
 	@Override
 	public void configurePersistenceUnit() throws Exception {
 		configurePersistenceUnit("SimplePU");
-	}
-
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		logger.info("**************************************");
-		logger.info(method.getName() + " has started");
-		logger.info("**************************************");
-	}
-
-	@AfterMethod
-	public void afterMethod(Method method) {
-		logger.info("**************************************");
-		logger.info(method.getName() + " has ended");
-		logger.info("**************************************");
 	}
 
 	@Test

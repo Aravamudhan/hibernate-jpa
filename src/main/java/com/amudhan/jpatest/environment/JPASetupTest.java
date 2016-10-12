@@ -6,7 +6,10 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -16,10 +19,25 @@ public class JPASetupTest extends TransactionManagerTest {
 	public String persistenceUnitName;
 	public String[] hbmResources;
 	public JPASetup jpaSetup;
+	private Logger logger = LoggerFactory.getLogger(JPASetupTest.class);
 
 	@BeforeClass
 	public void beforeClass() throws Exception {
 		configurePersistenceUnit();
+	}
+
+	@BeforeMethod
+	public void beforeMethod(Method method) {
+		logger.info("**************************************");
+		logger.info(method.getName() + " has started");
+		logger.info("**************************************");
+	}
+
+	@AfterMethod
+	public void afterMethod(Method method) {
+		logger.info("**************************************");
+		logger.info(method.getName() + " has ended");
+		logger.info("**************************************");
 	}
 
 	/*

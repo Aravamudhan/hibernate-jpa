@@ -93,5 +93,11 @@
 	 		<!-- <property name="hibernate.use_identifier_rollback" value="true"/> -->
 	 	</properties>
 	</persistence-unit>
+	<persistence-unit name="FetchingReadOnly">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.readonly.User</class>
+		<class>com.amudhan.jpatest.model.fetching.readonly.Item</class>
+		<class>com.amudhan.jpatest.model.fetching.readonly.Bid</class>
+	</persistence-unit>
 
 </persistence>
