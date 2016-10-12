@@ -1,13 +1,15 @@
-package com.amudhan.jpatest.model.fetching;
+	package com.amudhan.jpatest.model.fetching;
 
 import static org.testng.Assert.assertNotEquals;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
+import org.hibernate.Session;
 import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.environment.JPASetupTest;
@@ -105,6 +107,70 @@ public class ReadOnly extends JPASetupTest{
 		}finally{
 			TRANSACTION_MANAGER.rollback();
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void selectiveReadOnly() throws Exception{
+		FetchTestData testData = storeTestData();
+		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+		try{
+			tx.begin();
+			EntityManager em = jpaSetup.createEntityManager();
+			em.unwrap(Session.class).setDefaultReadOnly(true);
+			long itemId = testData.items.getFirstId();
+			{
+				Item item = em.find(Item.class, itemId);
+				item.setItemName("New Name");
+				/*No dirty checking and update.*/
+				em.flush();
+				em.clear();
+			}
+			{
+				Item item =  em.find(Item.class, itemId);
+				assertNotEquals(item.getItemName(),"New Name");
+				em.clear();
+			}
+			{
+				Item item =  em.find(Item.class, itemId);
+				em.unwrap(Session.class).setReadOnly(item, true);
+				item.setItemName("Another new name");
+				em.flush();
+				em.clear();
+			}
+			{
+				Item item =  em.find(Item.class, itemId);
+				assertNotEquals(item.getItemName(),"Another new name");
+				em.clear();
+			}
+			{
+				org.hibernate.Query query= em.unwrap(Session.class).createQuery("SELECT i from FETCHING_READONLY_ITEM i");
+				List<Item> items = query.setReadOnly(true).list();
+				for(Item item : items){
+					item.setItemName("New name");
+				}
+				em.flush();
+			}
+			{
+				List<Item> items = em.createQuery("SELECT i from FETCHING_READONLY_ITEM i").
+						setHint(org.hibernate.annotations.QueryHints.READ_ONLY, true).
+						getResultList();
+				for(Item item : items){
+					item.setItemName("New name");
+				}
+				em.flush();
+			}
+			{
+				em.clear();
+				Item item = em.find(Item.class, itemId);
+				assertNotEquals(item.getItemName(), "New name");
+			}
+			tx.commit();
+			em.close();
+		}finally{
+			TRANSACTION_MANAGER.rollback();
+		}
+		
 	}
 	
 }
