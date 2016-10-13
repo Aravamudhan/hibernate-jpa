@@ -18,6 +18,9 @@ import com.amudhan.jpatest.model.fetching.readonly.Item;
 import com.amudhan.jpatest.model.fetching.readonly.User;
 import com.amudhan.jpatest.shared.util.TestData;
 
+/* This class contains tests that demonstrate how the entities in a PC
+ * can be set to read only mode. This restricts any modifications to those
+ * entities. Deletion is allowed.*/
 public class ReadOnly extends JPASetupTest{
 
 	@Override
@@ -109,7 +112,7 @@ public class ReadOnly extends JPASetupTest{
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 	@Test
 	public void selectiveReadOnly() throws Exception{
 		FetchTestData testData = storeTestData();

@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceUnitUtil;
 import javax.transaction.UserTransaction;
 
@@ -307,6 +308,43 @@ public class SimpleTransitions extends JPASetupTest {
 			tx.commit();
 			em.close();
 			
+		}finally{
+			TRANSACTION_MANAGER.rollback();
+		}
+	}
+	
+	@Test
+	public void flushModeType() throws Exception{
+		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+		Long itemId;
+		try{
+			tx.begin();
+			EntityManager em = jpaSetup.createEntityManager();
+			Item someItem = new Item();
+			someItem.setName("Actual name");
+			em.persist(someItem);
+			tx.commit();
+			em.close();
+			itemId = someItem.getId();
+		}finally{
+			TRANSACTION_MANAGER.rollback();
+		}
+		try{
+			tx.begin();
+			EntityManager em = jpaSetup.createEntityManager();
+			Item item = em.find(Item.class, itemId);
+			item.setName("New name");
+			/* This disables flushing before commit. Only during commit,
+			 * flush is called.*/
+			em.setFlushMode(FlushModeType.COMMIT);
+			/* Usually Hibernate recognizes that the data has changed and would synchronize
+			 * with the memory before querying. Since the FlushModeType is commit, this default
+			 * behavior is restricted.*/
+			assertEquals(em.createQuery("SELECT i.name from SIMPLE_ITEM i where i.id = :id").
+											setParameter("id", itemId).getSingleResult(),"Actual name");
+			/* flush is called here. The name "New name" is set here.*/
+			tx.commit();
+			em.close();
 		}finally{
 			TRANSACTION_MANAGER.rollback();
 		}
