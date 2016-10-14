@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
@@ -120,7 +122,9 @@ public class SimpleTransitions extends JPASetupTest {
 		}
 	}
 
-	@Test(expectedExceptions = org.hibernate.LazyInitializationException.class)
+	/* getReference always returns a proxy and does not hit the database.*/
+	@Test(expectedExceptions = {org.hibernate.LazyInitializationException.class,
+			javax.persistence.EntityNotFoundException.class})
 	public void retrievePersistentReference() throws Exception {
 		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
 		/*
@@ -151,10 +155,13 @@ public class SimpleTransitions extends JPASetupTest {
 			 * EntityManager#getReference method always returns a proxy.
 			 */
 			Item itemAnother = em.getReference(Item.class, itemId);
+			/* There is no item with the id 100. Yet, a proxy is returned.*/
+			Item nonItem = em.getReference(Item.class, new Long(100));
 			PersistenceUnitUtil persistenceUtil = jpaSetup
 					.getEntityManagerFactory().getPersistenceUnitUtil();
 			// EntityManager#getReference returns an uninitialized proxy.
 			assertFalse(persistenceUtil.isLoaded(itemAnother));
+			assertFalse(persistenceUtil.isLoaded(nonItem));
 			/*
 			 * The proxy reference itemAnother will be initialized when it is
 			 * accessed inside the transaction. By calling the
@@ -163,6 +170,9 @@ public class SimpleTransitions extends JPASetupTest {
 			 */
 			/* The toString method initializes the proxy. */
 			// logger.info(itemAnother.toString());
+			/* This will throw EntityNotFound exception.
+			 * Hibernate hits the database only now.*/
+			logger.info(nonItem.toString());
 			tx.commit();
 			em.close();
 			/*
@@ -177,6 +187,11 @@ public class SimpleTransitions extends JPASetupTest {
 		}
 	}
 
+	/* When the remove is called on an entity, it is transformed to the transient
+	 * state from the persistent state, it is removed from the PC
+	 * and from the database as well. The row/rows representing the entity
+	 * will be deleted. The delete query will be triggered during the commit
+	 * or explicit flush.*/
 	@Test
 	public void makeTransient() throws Exception {
 		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
@@ -194,6 +209,7 @@ public class SimpleTransitions extends JPASetupTest {
 			em.persist(itemThree);
 			tx.commit();
 			em.close();
+			
 			Long itemOneId = itemOne.getId();
 			Long itemTwoId = itemTwo.getId();
 			Long itemThreeId = itemThree.getId();
@@ -313,6 +329,7 @@ public class SimpleTransitions extends JPASetupTest {
 		}
 	}
 	
+	/* To control when the flush() can be called.*/
 	@Test
 	public void flushModeType() throws Exception{
 		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
@@ -349,5 +366,141 @@ public class SimpleTransitions extends JPASetupTest {
 			TRANSACTION_MANAGER.rollback();
 		}
 	}
+	
+	/* Inside a transaction even if the find is called in an entity 
+	 * multiple times, it will only load from the PC.*/
+	@Test
+	public void scopeOfIdentity() throws Exception{
+		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+		try{
+			tx.begin();
+			EntityManager em = jpaSetup.createEntityManager();
+			Item someItem = new Item();
+            someItem.setName("Some Item");
+            em.persist(someItem);
+			tx.commit();
+			em.close();
+			Long itemId = someItem.getId();
+			
+			tx.begin();
+			em = jpaSetup.createEntityManager();
+			/* a and b are references to the same item in the PC.*/
+			Item a = em.find(Item.class, itemId);
+			Item b = em.find(Item.class, itemId);
+			assertTrue(a==b);
+			assertTrue(a.equals(b));
+			assertEquals(a.getId(), b.getId());
+			tx.commit();
+			em.close();
 
+			tx.begin();
+			em = jpaSetup.createEntityManager();
+			Item c = em.find(Item.class, itemId);
+			/* Though conceptually both a and c represent the same object, a is in
+			 * the detached state with reference to a heap location not managed by the current PC.
+			 * c points to a location in the heap managed by the current PC. Hence they both
+			 * are copies of the same object, but in different locations. Since equals method
+			 * is not overridden, the equality is compared using memory addresses of the heap.
+			 * Only way to tackle this type of situation is to override the equals method.*/
+			assertFalse(a==c);
+			assertFalse(a.equals(c));
+			assertEquals(a.getId(), c.getId());
+			tx.commit();
+			em.close();
+			
+			Set<Item> items = new HashSet<Item>();
+			items.add(a);
+			items.add(b);
+			items.add(c);
+			assertTrue(items.size()==2);
+		}finally{
+			TRANSACTION_MANAGER.rollback();
+		}
+	}
+
+	/* The detach removes an entity from the PC. Any non flushed changes
+	 * will not be synchronized with the database.*/
+	@Test
+	public void detach() throws Exception{
+		UserTransaction tx =  TRANSACTION_MANAGER.getUserTransaction();
+		try{
+			tx.begin();
+			EntityManager em = jpaSetup.createEntityManager();
+			User user = new User();
+			user.setUserName("Awesome guy");
+			user.setHomeAddress(new Address("Great street", "12345", "Paris"));
+			logger.info("Before persist the id is "+user.getId());
+			assertTrue(null == user.getId());
+			em.persist(user);
+			logger.info("After the persist the id is "+user.getId());
+			assertTrue(null != user.getId());
+			tx.commit();
+			em.close();
+			
+			Long userId = user.getId();
+			tx.begin();
+			em = jpaSetup.createEntityManager();
+			User detachedUser = em.find(User.class, userId);
+			em.detach(detachedUser);
+			assertFalse(em.contains(detachedUser));
+			tx.commit();
+			em.close();
+		}finally{
+			TRANSACTION_MANAGER.rollback();
+		}
+	}
+	
+	/* For a detached entity - Hibernate checks the PC whether the entity
+	 * exists. If it does not, it returns a new entity and copies the state
+	 * of the detached entity. During flush, an update will be triggered.
+	 * For a transient entity - Instead of an update query like in the case
+	 * of a detached entity, an insert query is triggered. This newly
+	 * returned entity will receive all the properties of the transient instance and 
+	 * will be made persistent. The entities supplied to the merge method should be
+	 * discarded since they are either transient or detached and wont be tracked
+	 * further. Merge creates or updates an entity.*/
+	@SuppressWarnings("unused")
+	@Test
+	public void mergeDetached() throws Exception{
+		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+		try{
+			tx.begin();
+			EntityManager em = jpaSetup.createEntityManager();
+			User detachedUser = new User();
+			detachedUser.setUserName("Foo name");
+			detachedUser.setHomeAddress(new Address("Foo street", "341", "Paris"));
+			detachedUser.setBillingAddress(new Address("Bar street", "123", "Berlin"));
+			em.persist(detachedUser);
+			tx.commit();
+			Long userId = detachedUser.getId();
+			em.close();
+			
+			detachedUser.setUserName("Bar name");
+			tx.begin();
+			em = jpaSetup.createEntityManager(); 
+			User mergedUser = em.merge(detachedUser);
+			assertTrue(mergedUser.getUserName().equals("Bar name"));
+			mergedUser.setUserName("Foo bar name");
+			tx.commit();
+			em.close();
+			
+			tx.begin();
+			em = jpaSetup.createEntityManager();
+			User user = em.find(User.class, userId);
+			assertTrue(user.getUserName().equals("Foo bar name"));
+			tx.commit();
+			em.close();
+			
+			User transientUser = new User();
+			transientUser.setUserName("Awesome guy");
+			transientUser.setHomeAddress(new Address("AB street","235","Paris"));
+			tx.begin();
+			em = jpaSetup.createEntityManager();
+			User persistedUser = em.merge(transientUser);
+			tx.commit();
+			em.close();
+		}finally{
+			
+		}
+	}
 }
