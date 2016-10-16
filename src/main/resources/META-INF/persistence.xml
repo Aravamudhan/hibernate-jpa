@@ -99,5 +99,13 @@
 		<class>com.amudhan.jpatest.model.fetching.readonly.Item</class>
 		<class>com.amudhan.jpatest.model.fetching.readonly.Bid</class>
 	</persistence-unit>
-
+	<persistence-unit name="ConcurrencyVersioningPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.concurrency.version.Item</class>
+		<class>com.amudhan.jpatest.model.concurrency.version.Category</class>
+	</persistence-unit>
+	<persistence-unit name="ConcurrencyVersioningTimestampPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.concurrency.versiontimestamp.Item</class>
+	</persistence-unit>
 </persistence>
