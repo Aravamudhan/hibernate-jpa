@@ -10,37 +10,37 @@ import javax.transaction.UserTransaction;
 import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.environment.JPASetupTest;
-import com.amudhan.jpatest.model.concurrency.versiontimestamp.Item;
+import com.amudhan.jpatest.model.concurrency.versionall.Item;
 
-public class VersioningTimeStamp extends JPASetupTest{
+public class VersioningAll extends JPASetupTest{
 
 	@Override
 	public void configurePersistenceUnit()throws Exception{
-		configurePersistenceUnit("ConcurrencyVersioningTimestampPU");
+		configurePersistenceUnit("ConcurrencyVersioningAllPU");
 	}
-
-	/* Versioning using timestamps is less safe compared to version numbers.
-	 * There is a possibility of two transactions updating a record at the same millisecond.*/
+	
+	/* This test demonstrates the ability of the Hibernate to
+	 * include all the columns in the versioning, instead of just
+	 * timestamp or version column.*/
 	@Test(expectedExceptions = OptimisticLockException.class)
-    public void firstCommitWins() throws Throwable {
-        UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+	public void firstCommitWinds() throws Throwable {
+		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
         try {
             tx.begin();
             EntityManager em = jpaSetup.createEntityManager();
             Item someItem = new Item();
             someItem.setName("Some Item");
+            someItem.setDescription("An awesome item");
             em.persist(someItem);
             tx.commit();
             em.close();
             final Long ITEM_ID = someItem.getId();
 
-            // Load an item and change its name
             tx.begin();
             em = jpaSetup.createEntityManager();
             Item item = em.find(Item.class, ITEM_ID);
             item.setName("New Name");
 
-            // The concurrent second unit of work doing the same
             Executors.newSingleThreadExecutor().submit(new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
@@ -50,9 +50,8 @@ public class VersioningTimeStamp extends JPASetupTest{
                         EntityManager em = jpaSetup.createEntityManager();
                         Item item = em.find(Item.class, ITEM_ID);
                         item.setName("Other Name");
-                        /* This updates the item using the id and the value of the lastUpdated column that
-                         * was present at the start of this transaction. The update query also updates the
-                         * lastUpdated value.*/
+                        /* The WHERE clause of the UPDATE contains
+                         * DESCRIPTION = 'An awesome item' and NAME = "Some Item AND ID = 1"*/
                         tx.commit();
                         em.close();
                     } catch (Exception ex) {
@@ -64,8 +63,10 @@ public class VersioningTimeStamp extends JPASetupTest{
             }).get();
 
             try {
-            	/* This would throw an exception. The value of the lastUpdated column
-            	 * is different than that was when this transaction was started.*/
+            	/* The WHERE clause of the generated UPDATE has DESCRIPTION, NAME and ID
+            	 * with its last known values "An awesome item", "Some Item" and 1. 
+            	 * This will return 0 rows since the name in the row that matches all
+            	 * these values is changed to "Other Name". This will throw exception.*/
                 tx.commit();
             } catch (Exception ex) {
                 throw unwrapCauseOfType(ex, OptimisticLockException.class);
@@ -74,6 +75,6 @@ public class VersioningTimeStamp extends JPASetupTest{
         } finally {
             TRANSACTION_MANAGER.rollback();
         }
-    }
-	
+		
+	}
 }

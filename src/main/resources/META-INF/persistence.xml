@@ -108,4 +108,8 @@
 		<jta-data-source>dataSourceOne</jta-data-source>
 		<class>com.amudhan.jpatest.model.concurrency.versiontimestamp.Item</class>
 	</persistence-unit>
+	<persistence-unit name="ConcurrencyVersioningAllPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.concurrency.versionall.Item</class>
+	</persistence-unit>
 </persistence>
