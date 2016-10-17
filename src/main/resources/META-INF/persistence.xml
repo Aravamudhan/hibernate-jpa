@@ -103,6 +103,7 @@
 		<jta-data-source>dataSourceOne</jta-data-source>
 		<class>com.amudhan.jpatest.model.concurrency.version.Item</class>
 		<class>com.amudhan.jpatest.model.concurrency.version.Category</class>
+		<class>com.amudhan.jpatest.model.concurrency.version.Bid</class>
 	</persistence-unit>
 	<persistence-unit name="ConcurrencyVersioningTimestampPU">
 		<jta-data-source>dataSourceOne</jta-data-source>
