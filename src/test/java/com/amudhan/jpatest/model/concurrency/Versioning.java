@@ -13,6 +13,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
 import javax.transaction.UserTransaction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.environment.JPASetupTest;
@@ -24,6 +26,8 @@ import com.amudhan.jpatest.shared.util.TestData;
 
 public class Versioning extends JPASetupTest {
 
+	private static Logger logger = LoggerFactory.getLogger(Versioning.class);
+			
 	@Override
 	public void configurePersistenceUnit() throws Exception {
 		configurePersistenceUnit("ConcurrencyVersioningPU");
@@ -42,6 +46,13 @@ public class Versioning extends JPASetupTest {
 	 * If several applications share a single database without all using the
 	 * versioning algorithm of Hibernate, concurrency problems will arise. In
 	 * that case, this method should be avoided.
+	 */
+	/*
+	 * Optimistic locking assumes that concurrent transactions will not be in
+	 * conflict with each other. Before committing each transaction verifies
+	 * that no other transaction has modified the data. If checks reveal
+	 * modifications, then the transaction is rolled back. The presence of
+	 * version column is what optimistic locking all about.
 	 */
 	@Test(expectedExceptions = OptimisticLockException.class)
 	public void firstCommitWins() throws Throwable {
@@ -186,11 +197,33 @@ public class Versioning extends JPASetupTest {
 		}
 	}
 
+	/* OPTIMISTIC_FOCE_INCREMENT explicitly increases the version number of
+	 * an entity during the flush.*/
+	@SuppressWarnings("unused")
 	@Test(expectedExceptions = org.hibernate.StaleObjectStateException.class)
 	public void forcedIncrement() throws Throwable {
 		final TestData testData = storeItemAndBids();
 		Long itemIds = testData.getFirstId();
 		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+		/* In this transaction even if no changes were made, the version
+		 * is automatically incremented.*/
+		try{
+			logger.info("OPTIMISTIC_FORCE_INCREMENT transaction begins");
+			tx.begin();
+			EntityManager em = jpaSetup.createEntityManager();
+			Item item = em.find(Item.class, itemIds, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+			tx.commit();
+			em.close();
+			logger.info("OPTIMISTIC_FORCE_INCREMENT transaction ends");
+		}finally{
+			TRANSACTION_MANAGER.rollback();
+		}
+		/* This transaction shows a scenario where this type of LOCK would be useful.
+		 * In both the transactions, explicit LOCK is applied. At the end of the
+		 * transactions this would automatically increase the version numbers.
+		 * The changed version number would show that one transaction happened
+		 * before another. We know that if one had happened, that must have made
+		 * some changes to a related entity.*/
 		try {
 			tx.begin();
 			EntityManager em = jpaSetup.createEntityManager();
@@ -210,15 +243,12 @@ public class Versioning extends JPASetupTest {
 								LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 						Bid highestBid = queryHighestBid(em, item);
 						try {
-                            Bid newBid = new Bid(
-                                new BigDecimal("44.44"),
-                                item,
-                                highestBid
-                            );
-                            em.persist(newBid);
-                        } catch (InvalidBidException ex) {
-                        	ex.printStackTrace();
-                        }
+							Bid newBid = new Bid(new BigDecimal("44.44"), item,
+									highestBid);
+							em.persist(newBid);
+						} catch (InvalidBidException ex) {
+							ex.printStackTrace();
+						}
 						em.persist(concurrentItem);
 						tx.commit();
 						em.close();
@@ -231,14 +261,9 @@ public class Versioning extends JPASetupTest {
 				}
 
 			}).get();
-			try{
-				@SuppressWarnings("unused")
-				Bid newBid = new Bid(
-	                    new BigDecimal("44.44"),
-	                    item,
-	                    highestBid
-	                );
-			}catch(InvalidBidException ex){
+			try {
+				Bid newBid = new Bid(new BigDecimal("44.44"), item, highestBid);
+			} catch (InvalidBidException ex) {
 				ex.printStackTrace();
 			}
 			tx.commit();
