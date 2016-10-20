@@ -113,4 +113,11 @@
 		<jta-data-source>dataSourceOne</jta-data-source>
 		<class>com.amudhan.jpatest.model.concurrency.versionall.Item</class>
 	</persistence-unit>
+	<persistence-unit name = "FetchingProxyPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.proxy.User</class>
+		<class>com.amudhan.jpatest.model.fetching.proxy.Bid</class>
+	 	<class>com.amudhan.jpatest.model.fetching.proxy.Category</class>
+	 	<class>com.amudhan.jpatest.model.fetching.proxy.Item</class>
+	</persistence-unit>
 </persistence>
