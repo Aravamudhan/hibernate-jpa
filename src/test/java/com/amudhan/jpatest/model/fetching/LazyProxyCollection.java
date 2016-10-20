@@ -2,11 +2,13 @@ package com.amudhan.jpatest.model.fetching;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -149,15 +151,13 @@ public class LazyProxyCollection extends JPASetupTest {
 			}
 			em.clear();
 			{
+				logger.info("Detach item");
 				Item item = em.find(Item.class, ITEM_ID);
 				em.detach(item);
 				em.detach(item.getSeller());
 				assertTrue(persistenceUtil.isLoaded(item));
 				assertTrue(persistenceUtil.isLoaded(item),"name");
 				assertFalse(persistenceUtil.isLoaded(item, "seller"));
-				/* TODO: Receving could not initialize proxy - no Session.
-				 * Why initialize ? Only accessing the ID.*/
-				/*assertEquals(item.getSeller().getId(), USER_ID);*/
 			}
 			em.clear();
 			{
@@ -183,4 +183,55 @@ public class LazyProxyCollection extends JPASetupTest {
 			TRANSACTION_MANAGER.rollback();
 		}
 	}
+	
+	@Test
+	public void lazyCollections() throws Exception{
+		FetchTestData testData = storeTestData();
+		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
+		PersistenceUtil persistenceUtil = Persistence
+				.getPersistenceUtil();
+		try{
+			tx.begin();
+			EntityManager em = jpaSetup.createEntityManager();
+			long itemId = testData.items.getFirstId();
+			{
+				logger.info("Lazy initialized bids");
+				Item item = em.find(Item.class, itemId);
+				/* bids are not initialized.*/
+				Set<Bid> bids = item.getBids();
+				assertFalse(persistenceUtil.isLoaded(bids));
+				assertTrue(Set.class.isAssignableFrom(bids.getClass()));
+				/* Hibernate implements lazy loading with its own
+				 * special collection wrappers. These wrappers provide extra
+				 * mechanisms for dirty checking, finding when the collection is
+				 * accessed and so on. This is why it is always the correct way to
+				 * code for interfaces, not the concrete classes.*/
+                // It's not a HashSet
+                assertNotEquals(bids.getClass(), HashSet.class);
+                /* Collection wrapper type provided by hibernate.*/
+                assertEquals(bids.getClass(), org.hibernate.collection.internal.PersistentSet.class);
+                /* The SELECT is triggered now. Item#bids is initialized.
+                 * Alternative is Hibernate.initialize*/
+                logger.info("SELECT query will be triggered now.");
+                @SuppressWarnings("unused")
+				Bid bid = bids.iterator().next();
+			}
+			em.clear();
+			{
+				Item item = em.find(Item.class, itemId);
+				logger.info("Checking the bids size. Count method is called.");
+				assertEquals(item.getBids().size(), 3);
+				/* Item#bids is not loaded. The previous query was only count(*), not a full SELECT.
+				 * The reason is 'LazyCollectionOption.EXTRA'. This provides extra options such as
+				 * not loading when calling count.*/
+				assertFalse(persistenceUtil.isLoaded(item.getBids()));
+			}
+			tx.commit();
+		}finally{
+			TRANSACTION_MANAGER.rollback();
+		}
+		
+	}
+	
+	
 }
