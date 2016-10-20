@@ -24,6 +24,7 @@ public class NonTransactional extends JPASetupTest {
 		configurePersistenceUnit("ConcurrencyVersioningPU");
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void autoCommit() throws Exception{
 		UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
@@ -79,6 +80,8 @@ public class NonTransactional extends JPASetupTest {
 			em.close();
 		}
 		{
+			/* Queuing an item for later flush when the entity manager
+			 * joins transaction.*/
 			logger.info("Joining EntityManager in a transaction.");
 			EntityManager em = jpaSetup.createEntityManager();
 			Item item = new Item("New item");
@@ -95,6 +98,31 @@ public class NonTransactional extends JPASetupTest {
 			/* flush is called.*/
 			tx.commit();
 			em.close();
+		}
+		{
+			logger.info("Queuing a merged item for the flush later.");
+			EntityManager tmp = jpaSetup.createEntityManager();
+			Item detachedItem = tmp.find(Item.class, itemId);
+			tmp.close();
+			
+			detachedItem.setName("New name");
+			EntityManager em = jpaSetup.createEntityManager();
+			Item mergedItem = em.merge(detachedItem); 
+			
+			tx.begin();
+			em.joinTransaction();
+			/* flush is called the mergedItem is updated.*/
+			tx.commit();
+			em.close();
+		}
+		{
+			logger.info("Queuing a removed item for the flush later.");
+			EntityManager em = jpaSetup.createEntityManager();
+			Item item = em.find(Item.class, itemId);
+			em.remove(item);
+			tx.begin();
+			em.joinTransaction();
+			tx.commit();
 		}
 		
 	}
