@@ -27,6 +27,8 @@ public class Item {
 	@NotNull
     @ManyToOne(fetch = FetchType.LAZY) 
     @org.hibernate.annotations.LazyToOne( 
+    		/* TODO: Needs byte code enhancement. Not configured currently. 
+    		 * Loads items eagerly because of the absence of the enhancement.*/
        org.hibernate.annotations.LazyToOneOption.NO_PROXY
     )
     protected User seller;

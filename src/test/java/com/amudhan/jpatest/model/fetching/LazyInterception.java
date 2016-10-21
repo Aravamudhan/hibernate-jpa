@@ -114,7 +114,7 @@ public class LazyInterception extends JPASetupTest {
 			EntityManager em = jpaSetup.createEntityManager();
 			logger.info("Loading item");
 			Item item = em.find(Item.class, itemId);
-			logger.info("Accessing description property. This is lazy loaded.");
+			logger.info("Accessing description property. This is to be lazy loaded with byte code enhancement.");
 			assertTrue(item.getDescription().length()>0);
 			tx.commit();
 			em.close();
