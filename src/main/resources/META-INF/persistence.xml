@@ -125,4 +125,10 @@
 		<class>com.amudhan.jpatest.model.fetching.interception.User</class>
 	 	<class>com.amudhan.jpatest.model.fetching.interception.Item</class>
 	</persistence-unit>
+	<persistence-unit name = "FetchingEagerJoinPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.eagerjoin.User</class>
+		<class>com.amudhan.jpatest.model.fetching.eagerjoin.Bid</class>
+	 	<class>com.amudhan.jpatest.model.fetching.eagerjoin.Item</class>
+	</persistence-unit>
 </persistence>
