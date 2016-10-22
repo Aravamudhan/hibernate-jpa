@@ -131,4 +131,16 @@
 		<class>com.amudhan.jpatest.model.fetching.eagerjoin.Bid</class>
 	 	<class>com.amudhan.jpatest.model.fetching.eagerjoin.Item</class>
 	</persistence-unit>
+	<persistence-unit name="FetchingNPlusOneSelectsPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.nplusoneselects.User</class>
+		<class>com.amudhan.jpatest.model.fetching.nplusoneselects.Bid</class>
+	 	<class>com.amudhan.jpatest.model.fetching.nplusoneselects.Item</class>
+	</persistence-unit>
+	<persistence-unit name="FetchingCartesianProductPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.cartesianproduct.User</class>
+		<class>com.amudhan.jpatest.model.fetching.cartesianproduct.Bid</class>
+	 	<class>com.amudhan.jpatest.model.fetching.cartesianproduct.Item</class>
+	</persistence-unit>
 </persistence>
