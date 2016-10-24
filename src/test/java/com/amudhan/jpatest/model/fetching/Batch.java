@@ -23,7 +23,7 @@ import com.amudhan.jpatest.shared.util.TestData;
 public class Batch extends JPASetupTest {
 
 	private static Logger logger = LoggerFactory
-			.getLogger(CartesianProduct.class);
+			.getLogger(Batch.class);
 
 	@Override
 	public void configurePersistenceUnit() throws Exception {

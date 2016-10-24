@@ -1,6 +1,7 @@
 package com.amudhan.jpatest.model.fetching;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,29 +14,21 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.environment.JPASetupTest;
-import com.amudhan.jpatest.model.fetching.cartesianproduct.Bid;
-import com.amudhan.jpatest.model.fetching.cartesianproduct.Item;
-import com.amudhan.jpatest.model.fetching.cartesianproduct.User;
-import com.amudhan.jpatest.shared.FetchTestLoadEventListener;
+import com.amudhan.jpatest.model.fetching.eagerselect.Bid;
+import com.amudhan.jpatest.model.fetching.eagerselect.Item;
+import com.amudhan.jpatest.model.fetching.eagerselect.User;
 import com.amudhan.jpatest.shared.util.TestData;
 
-public class CartesianProduct extends JPASetupTest {
+public class EagerSelect extends JPASetupTest{
 
 	private static Logger logger = LoggerFactory
-			.getLogger(CartesianProduct.class);
-	private FetchTestLoadEventListener loadEventListener;
+			.getLogger(EagerSelect.class);
 
 	@Override
 	public void configurePersistenceUnit() throws Exception {
-		configurePersistenceUnit("FetchingCartesianProductPU");
+		configurePersistenceUnit("FetchingEagerSelectPU");
 	}
 
-	@Override
-	public void afterJPABootstrap() throws Exception {
-		loadEventListener = new FetchTestLoadEventListener(
-				jpaSetup.getEntityManagerFactory());
-	}
-	
 	public FetchTestData storeTestData() throws Exception {
         UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
         tx.begin();
@@ -57,24 +50,19 @@ public class CartesianProduct extends JPASetupTest {
         userIds[2] = robertdoe.getId();
 
         Item item = new Item("Item One", LocalDateTime.now().plusDays(1), johndoe);
-        item.getImages().add("foo.jpg");
-        item.getImages().add("bar.jpg");
-        item.getImages().add("baz.jpg");
         em.persist(item);
         itemIds[0] = item.getId();
         for (int i = 1; i <= 3; i++) {
-            Bid bid = new Bid(new BigDecimal(9 + i), item);
+        	Bid bid = new Bid(item, robertdoe, new BigDecimal(9 + i));
             item.getBids().add(bid);
             em.persist(bid);
         }
 
         item = new Item("Item Two", LocalDateTime.now().plusDays(1), johndoe);
-        item.getImages().add("a.jpg");
-        item.getImages().add("b.jpg");
         em.persist(item);
         itemIds[1] = item.getId();
         for (int i = 1; i <= 1; i++) {
-            Bid bid = new Bid(new BigDecimal(2 + i), item);
+        	Bid bid = new Bid(item, janeroe, new BigDecimal(2 + i));
             item.getBids().add(bid);
             em.persist(bid);
         }
@@ -91,30 +79,27 @@ public class CartesianProduct extends JPASetupTest {
         testData.users = new TestData(userIds);
         return testData;
     }
-	/* The cartesian product occurs when there are N rows
-	 * in the tableOne and M rows in the tableTwo. The result
-	 * would contain NM rows when there are no common attributes
-	 * among them. The cartesian product problem occurs with multiple
-	 * joins in a single SQL query. There is a possibility of
-	 * duplicate items from the SQL query result. Hibernate removes
-	 * the duplicate items mostly. But this can not be avoided in
-	 * the result set of the SQL query.*/
+	
 	@Test
-	public void fetchCollections() throws Exception{
+    public void fetchEagerSelect() throws Exception {
 		FetchTestData testData = storeTestData();
-        loadEventListener.reset();
         UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
         try{
         	tx.begin();
         	EntityManager em = jpaSetup.createEntityManager();
         	Long itemId = testData.items.getFirstId();
-        	logger.info("Loading an item with eager loading");
+        	logger.info("Loading an item with eager select");
+        	logger.info("Loading Item#seller and Item#bids with separate SELECT.");
+        	/*This loads Item#seller and Item#bids with separate SELECT statements instead of joins*/
         	Item item = em.find(Item.class, itemId);
-        	assertEquals(loadEventListener.getLoadCount(Item.class), 1);
-            assertEquals(loadEventListener.getLoadCount(Bid.class), 3);
+        	logger.info("Detaching the item");
         	em.detach(item);
-        	assertEquals(item.getImages().size(), 3);
+        	/* Though the item alone is loaded separately, seller and bids are
+        	 * not loaded lazily. This is verified by checking their statuses
+        	 * in the detached state of the item.*/
             assertEquals(item.getBids().size(), 3);
+            assertNotNull(item.getBids().iterator().next().getAmount());
+            assertEquals(item.getSeller().getUsername(), "johndoe");
         	tx.commit();
         	em.close();
         }finally{

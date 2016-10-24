@@ -155,4 +155,10 @@
 		<class>com.amudhan.jpatest.model.fetching.subselect.Bid</class>
 	 	<class>com.amudhan.jpatest.model.fetching.subselect.Item</class>
 	</persistence-unit>
+	<persistence-unit name="FetchingEagerSelectPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.eagerselect.User</class>
+		<class>com.amudhan.jpatest.model.fetching.eagerselect.Bid</class>
+	 	<class>com.amudhan.jpatest.model.fetching.eagerselect.Item</class>
+	</persistence-unit>
 </persistence>
