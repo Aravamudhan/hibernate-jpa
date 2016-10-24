@@ -137,7 +137,7 @@ public class LazyProxyCollection extends JPASetupTest {
 				logger.info("The name of the item proxy's class "
 						+ item.getClass().getSimpleName());
 				/*
-				 * The getClass**Proxy method returns the underlying class of a
+				 * The getClass method returns the underlying class of a
 				 * proxy.
 				 */
 				assertEquals(

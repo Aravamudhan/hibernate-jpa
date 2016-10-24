@@ -143,4 +143,16 @@
 		<class>com.amudhan.jpatest.model.fetching.cartesianproduct.Bid</class>
 	 	<class>com.amudhan.jpatest.model.fetching.cartesianproduct.Item</class>
 	</persistence-unit>
+	<persistence-unit name="FetchingBatchPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.batch.User</class>
+		<class>com.amudhan.jpatest.model.fetching.batch.Bid</class>
+	 	<class>com.amudhan.jpatest.model.fetching.batch.Item</class>
+	</persistence-unit>
+	<persistence-unit name="FetchingSubselectPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.subselect.User</class>
+		<class>com.amudhan.jpatest.model.fetching.subselect.Bid</class>
+	 	<class>com.amudhan.jpatest.model.fetching.subselect.Item</class>
+	</persistence-unit>
 </persistence>
