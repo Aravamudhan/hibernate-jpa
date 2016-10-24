@@ -161,4 +161,11 @@
 		<class>com.amudhan.jpatest.model.fetching.eagerselect.Bid</class>
 	 	<class>com.amudhan.jpatest.model.fetching.eagerselect.Item</class>
 	</persistence-unit>
+	<persistence-unit name="FetchingProfilePU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.profile</class>
+		<class>com.amudhan.jpatest.model.fetching.profile.User</class>
+		<class>com.amudhan.jpatest.model.fetching.profile.Bid</class>
+	 	<class>com.amudhan.jpatest.model.fetching.profile.Item</class>
+	</persistence-unit>
 </persistence>
