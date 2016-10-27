@@ -69,6 +69,16 @@
    		<artifactId>hibernate-validator</artifactId>
    		<version>${hibernate-validator-version}</version>
 	</dependency>
+	<!-- JPA static meta model generator. Meta model classes are
+	generated in the target/generated-sources/annotations directory.
+	This directory must be added to the build path.  -->
+	<dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-jpamodelgen</artifactId>
+        <scope>compile</scope>
+        <version>${hibernate-entity-manager-version}</version>
+    	<optional>true</optional>
+    </dependency>
 	<!-- HikariCP, connnection pool -->
 	<dependency>
    		<groupId>com.zaxxer</groupId>
@@ -99,7 +109,7 @@
 		<groupId>org.testng</groupId>
 	    <artifactId>testng</artifactId>
 	    <version>${testng-version}</version>
-	    <scope>test</scope>
+	    <scope>compile</scope>
 	</dependency>
 	<dependency>
     	<groupId>com.h2database</groupId>

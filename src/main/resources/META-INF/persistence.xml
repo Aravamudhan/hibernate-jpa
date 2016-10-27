@@ -168,4 +168,10 @@
 		<class>com.amudhan.jpatest.model.fetching.profile.Bid</class>
 	 	<class>com.amudhan.jpatest.model.fetching.profile.Item</class>
 	</persistence-unit>
+	<persistence-unit name="FetchingFetchLoadGraphPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.fetching.fetchloadgraph.User</class>
+		<class>com.amudhan.jpatest.model.fetching.fetchloadgraph.Bid</class>
+	 	<class>com.amudhan.jpatest.model.fetching.fetchloadgraph.Item</class>
+	</persistence-unit>
 </persistence>
