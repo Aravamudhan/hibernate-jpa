@@ -174,4 +174,15 @@
 		<class>com.amudhan.jpatest.model.fetching.fetchloadgraph.Bid</class>
 	 	<class>com.amudhan.jpatest.model.fetching.fetchloadgraph.Item</class>
 	</persistence-unit>
+	<persistence-unit name="FilteringCascadePU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+        <mapping-file>filtering/DefaultCascadePersist.xml</mapping-file>
+		<class>com.amudhan.jpatest.model.filtering.cascade.User</class>
+		<class>com.amudhan.jpatest.model.filtering.cascade.Bid</class>
+	 	<class>com.amudhan.jpatest.model.filtering.cascade.Item</class>
+	 	<class>com.amudhan.jpatest.model.filtering.cascade.Image</class>
+	 	<class>com.amudhan.jpatest.model.filtering.cascade.BillingDetails</class>
+	 	<class>com.amudhan.jpatest.model.filtering.cascade.CreditCard</class>
+	 	<class>com.amudhan.jpatest.model.filtering.cascade.BankAccount</class>
+	</persistence-unit>
 </persistence>

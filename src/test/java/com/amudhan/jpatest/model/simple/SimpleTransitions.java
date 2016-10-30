@@ -451,8 +451,9 @@ public class SimpleTransitions extends JPASetupTest {
 	}
 	
 	/* For a detached entity - Hibernate checks the PC whether the entity
-	 * exists. If it does not, it returns a new entity and copies the state
-	 * of the detached entity. During flush, an update will be triggered.
+	 * already exists. If it does not, it returns a new entity and copies the state
+	 * of the detached entity. The state includes the child entities too.
+	 * During flush, an update will be triggered.
 	 * For a transient entity - Instead of an update query like in the case
 	 * of a detached entity, an insert query is triggered. This newly
 	 * returned entity will receive all the properties of the transient instance and 
@@ -500,7 +501,7 @@ public class SimpleTransitions extends JPASetupTest {
 			tx.commit();
 			em.close();
 		}finally{
-			
+			TRANSACTION_MANAGER.rollback();
 		}
 	}
 }
