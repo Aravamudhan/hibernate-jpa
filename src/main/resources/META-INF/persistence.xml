@@ -185,4 +185,9 @@
 	 	<class>com.amudhan.jpatest.model.filtering.cascade.CreditCard</class>
 	 	<class>com.amudhan.jpatest.model.filtering.cascade.BankAccount</class>
 	</persistence-unit>
+	<persistence-unit name="FilteringCallbackPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.filtering.callback.User</class>
+	 	<class>com.amudhan.jpatest.model.filtering.callback.Item</class>
+	</persistence-unit>
 </persistence>
