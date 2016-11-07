@@ -188,6 +188,13 @@
 	<persistence-unit name="FilteringCallbackPU">
 		<jta-data-source>dataSourceOne</jta-data-source>
 		<class>com.amudhan.jpatest.model.filtering.callback.User</class>
+		<class>com.amudhan.jpatest.model.filtering.callback.SpecialUser</class>
 	 	<class>com.amudhan.jpatest.model.filtering.callback.Item</class>
+	</persistence-unit>
+	<persistence-unit name="FilteringInterceptorPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.filtering.interceptors.User</class>
+	 	<class>com.amudhan.jpatest.model.filtering.interceptors.Item</class>
+	 	<class>com.amudhan.jpatest.model.filtering.interceptor.AuditLogRecord</class>
 	</persistence-unit>
 </persistence>

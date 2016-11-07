@@ -5,6 +5,8 @@ import javax.persistence.ExcludeDefaultListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 @Entity(name = "FILTERING_CALLBACK_USER")
 @ExcludeDefaultListeners
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
 	@Id
@@ -63,7 +66,7 @@ public class User {
 	@PostPersist
     public void notifyAdmin(){
         Mail mail = Mail.INSTANCE;
-        logger.info(this.getUserName() +"is persisted.");
+        logger.info(this.getUserName() +" is persisted.");
         mail.send(
                 " In the entity: "
                 + this.getClass()

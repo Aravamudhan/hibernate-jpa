@@ -14,6 +14,7 @@ import com.amudhan.jpatest.environment.JPASetupTest;
 import com.amudhan.jpatest.model.filtering.callback.CurrentUser;
 import com.amudhan.jpatest.model.filtering.callback.Item;
 import com.amudhan.jpatest.model.filtering.callback.Mail;
+import com.amudhan.jpatest.model.filtering.callback.SpecialUser;
 import com.amudhan.jpatest.model.filtering.callback.User;
 
 public class Callback extends JPASetupTest {
@@ -62,6 +63,15 @@ public class Callback extends JPASetupTest {
                 CurrentUser.INSTANCE.set(null);
 			}
 			em.clear();
+			{
+				logger.info("Persisting SpecialUser");
+				SpecialUser sUser = new SpecialUser();
+				sUser.setUserName("Awesome special user");
+				sUser.setGiftPoints(200);
+				em.persist(sUser);
+			}
+			tx.commit();
+			em.close();
 		} finally{
 			TRANSACTION_MANAGER.rollback();
 		}
