@@ -69,6 +69,11 @@
    		<artifactId>hibernate-validator</artifactId>
    		<version>${hibernate-validator-version}</version>
 	</dependency>
+	<dependency>
+		<groupId>org.hibernate</groupId>
+        <artifactId>hibernate-envers</artifactId>
+        <version>${hibernate-entity-manager-version}</version>
+	</dependency>
 	<!-- JPA static meta model generator. Meta model classes are
 	generated in the target/generated-sources/annotations directory.
 	This directory must be added to the build path.  -->

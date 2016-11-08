@@ -197,4 +197,10 @@
 	 	<class>com.amudhan.jpatest.model.filtering.interceptors.Item</class>
 	 	<class>com.amudhan.jpatest.model.filtering.interceptor.AuditLogRecord</class>
 	</persistence-unit>
+	<persistence-unit name="FilteringEnversPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.filtering.envers.User</class>
+	 	<class>com.amudhan.jpatest.model.filtering.envers.Item</class>
+	 	<class>com.amudhan.jpatest.model.filtering.envers.Bid</class>
+	</persistence-unit>
 </persistence>
