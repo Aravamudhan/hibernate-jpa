@@ -203,4 +203,11 @@
 	 	<class>com.amudhan.jpatest.model.filtering.envers.Item</class>
 	 	<class>com.amudhan.jpatest.model.filtering.envers.Bid</class>
 	</persistence-unit>
+	<persistence-unit name="FilteringDynamicPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<class>com.amudhan.jpatest.model.filtering.dynamic.User</class>
+	 	<class>com.amudhan.jpatest.model.filtering.dynamic.Item</class>
+	 	<class>com.amudhan.jpatest.model.filtering.dynamic.Category</class>
+	 	<class>com.amudhan.jpatest.model.filtering</class>
+	</persistence-unit>
 </persistence>
