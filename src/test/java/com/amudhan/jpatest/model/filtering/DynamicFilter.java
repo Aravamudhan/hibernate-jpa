@@ -10,6 +10,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.UserTransaction;
 
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import com.amudhan.jpatest.environment.JPASetupTest;
@@ -20,6 +22,8 @@ import com.amudhan.jpatest.shared.util.TestData;
 
 public class DynamicFilter extends JPASetupTest{
 
+	private Logger logger = LoggerFactory.getLogger(DynamicFilter.class);
+	
 	@Override
     public void configurePersistenceUnit() throws Exception {
         configurePersistenceUnit("FilteringDynamicPU");
@@ -32,6 +36,7 @@ public class DynamicFilter extends JPASetupTest{
     }
     
     public DynamicFilterTestData storeTestData() throws Exception {
+    	logger.info("*****Store data starts*****");
         UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
         tx.begin();
         EntityManager em = jpaSetup.createEntityManager();
@@ -67,6 +72,7 @@ public class DynamicFilter extends JPASetupTest{
 
         tx.commit();
         em.close();
+        logger.info("*****Store data ends*****");
         return testData;
     }
     
@@ -85,13 +91,13 @@ public class DynamicFilter extends JPASetupTest{
                 filter.setParameter("currentUserRank", 0);
 
                 {
-                    List<Item> items = em.createQuery("select i from Item i").getResultList();
+                    List<Item> items = em.createQuery("select i from FILTERING_DYNAMIC_ITEM i").getResultList();
                     // select * from ITEM where 0 >=
                     //  (select u.RANK from USERS u  where u.ID = SELLER_ID)
                     assertEquals(items.size(), 1);
                 }
                 em.clear();
-                {
+                /*{
                     CriteriaBuilder cb = em.getCriteriaBuilder();
                     CriteriaQuery criteria = cb.createQuery();
                     criteria.select(criteria.from(Item.class));
@@ -101,12 +107,12 @@ public class DynamicFilter extends JPASetupTest{
                     assertEquals(items.size(), 1);
                 }
                 em.clear();
-
-                filter.setParameter("currentUserRank", 100);
+*/
+                /*filter.setParameter("currentUserRank", 100);
                 List<Item >items =
-                    em.createQuery("select i from Item i")
+                    em.createQuery("select i from FILTERING_DYNAMIC_ITEM i")
                         .getResultList();
-                assertEquals(items.size(), 3);
+                assertEquals(items.size(), 3);*/
             }
     		em.clear();
     		tx.commit();

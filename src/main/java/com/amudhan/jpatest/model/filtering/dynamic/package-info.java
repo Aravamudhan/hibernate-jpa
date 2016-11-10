@@ -12,7 +12,7 @@
         name = "limitByUserRankDefault",
         defaultCondition=
             ":currentUserRank >= (" +
-                    "select u.RANK from USERS u " +
+                    "select u.RANK from FILTERING_DYNAMIC_USER u " +
                     "where u.ID = SELLER_ID" +
                 ")",
         parameters = {

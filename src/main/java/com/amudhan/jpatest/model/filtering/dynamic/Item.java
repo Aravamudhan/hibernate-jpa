@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 	    name = "limitByUserRank",
 	    condition =
 	        ":currentUserRank >= (" +
-	                "select u.RANK from USERS u " +
+	                "select u.RANK from FILTERING_DYNAMIC_USER u " +
 	                "where u.ID = SELLER_ID" +
 	            ")"
 )	                
