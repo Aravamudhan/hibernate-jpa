@@ -75,10 +75,11 @@ public class DynamicFilter extends JPASetupTest{
         logger.info("*****Store data ends*****");
         return testData;
     }
-    
+
+    @SuppressWarnings("unchecked")
     @Test
     public void filterItems() throws Throwable{
-    	DynamicFilterTestData testData = storeTestData();
+    	storeTestData();
     	UserTransaction tx = TRANSACTION_MANAGER.getUserTransaction();
     	try{
     		tx.begin();
@@ -91,15 +92,18 @@ public class DynamicFilter extends JPASetupTest{
                 filter.setParameter("currentUserRank", 0);
 
                 {
-                    List<Item> items = em.createQuery("select i from FILTERING_DYNAMIC_ITEM i").getResultList();
+                	logger.info("------Retrieving Items----");
+					List<Item> items = em.createQuery("select i from FILTERING_DYNAMIC_ITEM i").getResultList();
                     // select * from ITEM where 0 >=
                     //  (select u.RANK from USERS u  where u.ID = SELLER_ID)
                     assertEquals(items.size(), 1);
                 }
                 em.clear();
-                /*{
+                {
+                	logger.info("------Criteria queries----");
                     CriteriaBuilder cb = em.getCriteriaBuilder();
-                    CriteriaQuery criteria = cb.createQuery();
+                    @SuppressWarnings("rawtypes")
+					CriteriaQuery criteria = cb.createQuery();
                     criteria.select(criteria.from(Item.class));
                     List<Item> items = em.createQuery(criteria).getResultList();
                     // select * from ITEM where 0 >=
@@ -107,18 +111,19 @@ public class DynamicFilter extends JPASetupTest{
                     assertEquals(items.size(), 1);
                 }
                 em.clear();
-*/
-                /*filter.setParameter("currentUserRank", 100);
+
+                filter.setParameter("currentUserRank", 100);
+                logger.info("------Item for the current user with the rank 100----");
                 List<Item >items =
                     em.createQuery("select i from FILTERING_DYNAMIC_ITEM i")
                         .getResultList();
-                assertEquals(items.size(), 3);*/
+                assertEquals(items.size(), 3);
             }
     		em.clear();
     		tx.commit();
     		em.close();
     	}finally{
-    		
+    		TRANSACTION_MANAGER.rollback();
     	}
     	
     }

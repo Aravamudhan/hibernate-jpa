@@ -34,8 +34,7 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     private User seller;
 
-    @SuppressWarnings("unused")
-	private Item() {
+    public Item() {
     }
 
     public Item(String name, Category category, User seller) {

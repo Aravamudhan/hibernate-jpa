@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity(name = "FILTERING_DYNAMIC_USER")
-public class User {
+public class User  {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,8 +19,11 @@ public class User {
     @NotNull
     private int rank = 0;
 
-    @SuppressWarnings("unused")
-	private User() {
+    /*
+     * JavaAssist could not find a private constructor here.
+     * Causes NoSuchMethod exception.
+     */
+	public User() {
     }
 
     public User(String username) {
