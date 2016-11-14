@@ -210,4 +210,29 @@
 	 	<class>com.amudhan.jpatest.model.filtering.dynamic.Category</class>
 	 	<class>com.amudhan.jpatest.model.filtering.dynamic</class>
 	</persistence-unit>
+	<persistence-unit name="QueryingPU">
+		<jta-data-source>dataSourceOne</jta-data-source>
+		<!-- <mapping-file>querying/ExternalizedQueries.xml</mapping-file>
+        <mapping-file>querying/Selection.xml</mapping-file>
+        <mapping-file>querying/Restriction.xml</mapping-file>
+        <mapping-file>querying/Projection.xml</mapping-file>
+        <mapping-file>querying/Joins.xml</mapping-file>
+        <mapping-file>querying/Grouping.xml</mapping-file>
+        <mapping-file>querying/Subselects.xml</mapping-file>
+        <mapping-file>querying/NativeQueries.xml</mapping-file> -->
+        <class>com.amudhan.jpatest.model.querying</class>
+		<class>com.amudhan.jpatest.model.querying.User</class>
+	 	<class>com.amudhan.jpatest.model.querying.Item</class>
+	 	<class>com.amudhan.jpatest.model.querying.Category</class>
+	 	<class>com.amudhan.jpatest.model.querying.Bid</class>
+	 	<class>com.amudhan.jpatest.model.querying.Image</class>
+	 	<class>com.amudhan.jpatest.model.querying.Address</class>
+	 	<class>com.amudhan.jpatest.model.querying.LogRecord</class>
+	 	<class>com.amudhan.jpatest.model.inheritance.tableperclass.BillingDetails</class>
+	 	<class>com.amudhan.jpatest.model.inheritance.tableperclass.BankAccount</class>
+	 	<class>com.amudhan.jpatest.model.inheritance.tableperclass.CreditCard</class>
+	 	<properties>
+            <property name="hibernate.order_by.default_null_ordering" value="first"/>
+        </properties>
+	</persistence-unit>
 </persistence>
