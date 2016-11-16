@@ -7,9 +7,11 @@ import java.util.Set;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.FieldResult;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,18 +19,23 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.QueryHint;
+import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.validation.constraints.NotNull;
 
-/*@NamedQueries({
+@NamedQueries({
     @NamedQuery(
         name = "findItemById",
-        query = "select i from Item i where i.id = :id"
+        query = "select i from QUERYING_ITEM i where i.id = :id"
     )
     ,
     @NamedQuery(
         name = "findItemByName",
-        query = "select i from Item i where i.name like :name",
+        query = "select i from QUERYING_ITEM i where i.name like :name",
         hints = {
             @QueryHint(
                 name = org.hibernate.annotations.QueryHints.TIMEOUT_JPA,
@@ -57,7 +64,7 @@ import javax.validation.constraints.NotNull;
             }
         )
     )
-})*/
+})
 @Entity(name="QUERYING_ITEM")
 public class Item {
 
